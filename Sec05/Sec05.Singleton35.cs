@@ -10,7 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using MoreLinq;
 using System.ComponentModel;
 
-namespace Sec05
+namespace Sec05.Singleton35
 {
     public interface IDatabase
     {
