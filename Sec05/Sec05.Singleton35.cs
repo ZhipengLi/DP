@@ -9,6 +9,7 @@ using static System.Console;
 using System.Runtime.Serialization.Formatters.Binary;
 using MoreLinq;
 using System.ComponentModel;
+using NUnit.Framework;
 
 namespace Sec05.Singleton35
 {
@@ -38,14 +39,14 @@ namespace Sec05.Singleton35
 
         public static SingletonDatabase Instance => instance.Value;
     }
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var db = SingletonDatabase.Instance;
-            var city = "Tokyo";
-            WriteLine($"{city} has population { db.GetPopulation(city)}");
-            ReadLine();
-        }
-    }
+    //class Program
+    //{
+    //    static void Main(string[] args)
+    //    {
+    //        var db = SingletonDatabase.Instance;
+    //        var city = "Tokyo";
+    //        WriteLine($"{city} has population { db.GetPopulation(city)}");
+    //        ReadLine();
+    //    }
+    //}
 }
