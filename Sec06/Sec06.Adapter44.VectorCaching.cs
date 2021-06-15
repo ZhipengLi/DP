@@ -1,14 +1,16 @@
 ﻿using MoreLinq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec06
+namespace Sec06.Vector44
 {
     public class Point
     {
@@ -17,6 +19,10 @@ namespace Sec06
         {
             X = x;
             Y = y;
+        }
+        public override int GetHashCode()
+        {
+            return (X * 397) ^ Y;
         }
     }
     public class Line
@@ -35,28 +41,47 @@ namespace Sec06
             Start = start;
             End = end;
         }
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((Start != null ? Start.GetHashCode() : 0) * 397) ^ (End != null ? End.GetHashCode() : 0);
+            }
+        }
     }
 
     public class VectorObject : Collection<Line>
-    { 
-    
+    {
+
     }
     public class VectorRectangle : VectorObject
     {
         public VectorRectangle(int x, int y, int width, int height)
         {
             Add(new Line(new Point(x, y), new Point(x + width, y)));
-            Add(new Line(new Point(x+width, y), new Point(x + width, y+height)));
-            Add(new Line(new Point(x, y), new Point(x, y+height)));
-            Add(new Line(new Point(x, y+height), new Point(x + width, y+height)));
+            Add(new Line(new Point(x + width, y), new Point(x + width, y + height)));
+            Add(new Line(new Point(x, y), new Point(x, y + height)));
+            Add(new Line(new Point(x, y + height), new Point(x + width, y + height)));
         }
     }
-    public class LineToPointAdapter : Collection<Point>
+    public class LineToPointAdapter : IEnumerable<Point>
     {
         private static int count;
+        static Dictionary<int, List<Point>> cache
+             = new Dictionary<int, List<Point>>();
+
+
+
         public LineToPointAdapter(Line line)
         {
+            var hash = line.GetHashCode();
+            if (cache.ContainsKey(hash))
+                return;
+
             Console.Write($"{++count}: generating points for line[{line.Start.X}, {line.Start.Y}]");
+
+            var points = new List<Point>();
+            
             int left = Math.Min(line.Start.X, line.End.X);
             int right = Math.Max(line.Start.X, line.End.X);
             int top = Math.Min(line.Start.Y, line.End.Y);
@@ -68,16 +93,28 @@ namespace Sec06
             {
                 for (int y = top; y <= bottom; ++y)
                 {
-                    Add(new Point(left, y));
+                    points.Add(new Point(left, y));
                 }
             }
             else if (dy == 0)
             {
                 for (int x = left; x <= right; ++x)
                 {
-                    Add(new Point(x, top));
+                    points.Add(new Point(x, top));
                 }
             }
+
+            cache.Add(hash, points);
+        }
+
+        public IEnumerator<Point> GetEnumerator()
+        {
+            return cache.Values.SelectMany(x => x).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
     class Program
