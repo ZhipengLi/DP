@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec06
+namespace Sec06.Vector43
 {
     public class Point
     {

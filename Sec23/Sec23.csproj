@@ -74,8 +74,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Sec23.Template142.TemplateMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sec23.Template143.FunctionalTemplateMethod.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

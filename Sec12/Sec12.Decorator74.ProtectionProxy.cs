@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec11.Decorator71
+namespace Sec12.Decorator71
 {
     public interface ICar
     {

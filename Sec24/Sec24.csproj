@@ -74,8 +74,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Sec24.Visitor146.IntrusiveExpressionPrinting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sec24.Visitor147.ReflectionBasedPrinting.cs" />
+    <Compile Include="Sec24.Visitor148.ClassicVisitorDoubleDispatch.cs" />
+    <Compile Include="Sec24.Visitor149.DynamicVisitorViaTheDLR.cs" />
+    <Compile Include="Sec24.Visitor150.AcyclicVisitor.cs" />
+    <Compile Include="Sec24.Visitor151.Exercise.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

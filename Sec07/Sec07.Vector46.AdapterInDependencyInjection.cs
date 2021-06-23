@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec06.Vector46
+namespace Sec07.Vector46
 {
     public interface ICommand
     {
