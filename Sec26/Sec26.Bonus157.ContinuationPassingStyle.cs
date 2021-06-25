@@ -85,7 +85,18 @@ namespace Sec26.Bonus157
         [Test]
         public void BasicTest()
         {
+            var solver = new QuadraticEquationSolver();
+            Tuple<Complex, Complex> solution;
+            var flag = solver.Start(1, 10, 16, out solution);
 
+            // (-b +/- (b*b-4*a*c)^0.5) / (2 * a)
+            //
+            Assert.AreEqual(flag, WorkflowResult.Success);
+            Assert.AreEqual(solution.Item1, new Complex(-2.0, 0));
+            Assert.AreEqual(solution.Item2, new Complex(-8.0, 0));
+
+            flag = solver.Start(1, 1, 1, out solution);
+            Assert.AreEqual(flag, WorkflowResult.Failure);
         }
     }
 }
