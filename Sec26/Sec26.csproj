@@ -85,6 +85,7 @@
     <Compile Include="Sec26.Bonus157.ContinuationPassingStyle.cs" />
     <Compile Include="Sec26.Bonus158.LocalInversionOfControl.cs" />
     <Compile Include="Sec26.Bonus160.BeyondTheElvisOperator.cs" />
+    <Compile Include="Sec26.Bonus161.CQRSAndEventSourcing.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
