@@ -68,11 +68,11 @@ namespace Sec02.Builder14
 
     public class Demo
     {
-        static void Main(string[] args)
-        {
-            main();
-            ReadLine();
-        }
+        //static void Main(string[] args)
+        //{
+        //    main();
+        //    ReadLine();
+        //}
         static void main()
         {
             var me = Person.New

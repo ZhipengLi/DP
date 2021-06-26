@@ -51,7 +51,8 @@
   <ItemGroup>
     <Compile Include="Sec02.Builder12.Builder.cs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sec02.Builder14FluentBuilderInheritanceWithRecursiveGenerics.cs" />
+    <Compile Include="Sec02.Builder14.FluentBuilderInheritanceWithRecursiveGenerics.cs" />
+    <Compile Include="Sec02.Builder15.FunctionalBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
