@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
@@ -115,7 +116,17 @@ namespace Sec02.Builder15
 
             Type type = typeof(PersonBuilder);
             Assert.IsNotNull(type.GetMethod("Called"));
+            
+            // Check extension methods:
+            //
             Assert.IsNull(type.GetMethod("WorksAs"));
+
+            Assert.IsNotNull(type.GetMethod("Do"));
+            Assert.IsNotNull(type.GetMethod("Build"));
+            Assert.IsNull(type.GetMethod("AddAction", BindingFlags.NonPublic | BindingFlags.Instance));
+
+            type = typeof(FunctionalBuilder<Person, PersonBuilder>);
+            Assert.IsNotNull(type.GetMethod("AddAction", BindingFlags.NonPublic | BindingFlags.Instance));
 
             var p = builder.Build();
             Assert.AreEqual(p.Name, "Sarah");
