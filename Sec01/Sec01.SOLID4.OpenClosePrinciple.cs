@@ -1,60 +1,49 @@
-﻿using System;
+﻿using NUnit.Framework;
+using NUnit.Framework.Internal;
+using NUnit.Framework.Internal.Execution;
+using System;
+using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using static System.Console;
-
 namespace Sec01.SOLID04.OpenClose
 {
-    public enum Color
-    {
-        Red, Green, Blue
-    }
+    //public class ProductFilter
+    //{
+    //    // let's suppose we don't want ad-hoc queries on products
+    //    public IEnumerable<Product> FilterByColor(IEnumerable<Product> products, Color color)
+    //    {
+    //        foreach (var p in products)
+    //            if (p.Color == color)
+    //                yield return p;
+    //    }
 
-    public enum Size
-    {
-        Small, Medium, Large, Yuge
-    }
+    //    public static IEnumerable<Product> FilterBySize(IEnumerable<Product> products, Size size)
+    //    {
+    //        foreach (var p in products)
+    //            if (p.Size == size)
+    //                yield return p;
+    //    }
 
-    public class Product
-    {
-        public string Name;
-        public Color Color;
-        public Size Size;
+    //    public static IEnumerable<Product> FilterBySizeAndColor(IEnumerable<Product> products, Size size, Color color)
+    //    {
+    //        foreach (var p in products)
+    //            if (p.Size == size && p.Color == color)
+    //                yield return p;
+    //    } // state space explosion
+    //      // 3 criteria = 7 methods
 
-        public Product(string name, Color color, Size size)
-        {
-            Name = name ?? throw new ArgumentNullException(paramName: nameof(name));
-            Color = color;
-            Size = size;
-        }
-    }
-
-    public class ProductFilter
-    {
-        // let's suppose we don't want ad-hoc queries on products
-        public IEnumerable<Product> FilterByColor(IEnumerable<Product> products, Color color)
-        {
-            foreach (var p in products)
-                if (p.Color == color)
-                    yield return p;
-        }
-
-        public static IEnumerable<Product> FilterBySize(IEnumerable<Product> products, Size size)
-        {
-            foreach (var p in products)
-                if (p.Size == size)
-                    yield return p;
-        }
-
-        public static IEnumerable<Product> FilterBySizeAndColor(IEnumerable<Product> products, Size size, Color color)
-        {
-            foreach (var p in products)
-                if (p.Size == size && p.Color == color)
-                    yield return p;
-        } // state space explosion
-          // 3 criteria = 7 methods
-
-        // OCP = open for extension but closed for modification
-    }
+    //    // OCP = open for extension but closed for modification
+    //}
 
     // we introduce two new interfaces that are open for extension
 
@@ -124,7 +113,30 @@ namespace Sec01.SOLID04.OpenClose
                     yield return i;
         }
     }
+    //=========================================================================================
+    public enum Color
+    {
+        Red, Green, Blue
+    }
 
+    public enum Size
+    {
+        Small, Medium, Large, Yuge
+    }
+
+    public class Product
+    {
+        public string Name;
+        public Color Color;
+        public Size Size;
+
+        public Product(string name, Color color, Size size)
+        {
+            Name = name ?? throw new ArgumentNullException(paramName: nameof(name));
+            Color = color;
+            Size = size;
+        }
+    }
     public class Demo
     {
         static void Main(string[] args)
@@ -135,10 +147,10 @@ namespace Sec01.SOLID04.OpenClose
 
             Product[] products = { apple, tree, house };
 
-            var pf = new ProductFilter();
-            WriteLine("Green products (old):");
-            foreach (var p in pf.FilterByColor(products, Color.Green))
-                WriteLine($" - {p.Name} is green");
+            //var pf = new ProductFilter();
+            //WriteLine("Green products (old):");
+            //foreach (var p in pf.FilterByColor(products, Color.Green))
+            //    WriteLine($" - {p.Name} is green");
 
             // ^^ BEFORE
 
@@ -161,6 +173,36 @@ namespace Sec01.SOLID04.OpenClose
             }
 
             ReadLine();
+        }
+    }
+
+    [TestFixture]
+    public class Tests
+    {
+
+        [Test]
+        public void BasicTest()
+        {
+            var apple = new Product("Apple", Color.Green, Size.Small);
+            var tree = new Product("Tree", Color.Green, Size.Large);
+            var house = new Product("House", Color.Blue, Size.Large);
+
+            Product[] products = { apple, tree, house };
+
+            var bf = new BetterFilter();
+            WriteLine("Green products (new):");
+            var results =  bf.Filter(products, new ColorSpecification(Color.Green)).ToList();
+            Assert.IsTrue(results.Count == 2);
+            Assert.IsTrue(results[0].Color == Color.Green);
+
+            results = bf.Filter(products, new SizeSpecification(Size.Large)).ToList();
+            Assert.IsTrue(results.Count == 2);
+            Assert.IsTrue(results[0].Size == Size.Large);
+
+            results = bf.Filter(products,
+              new AndSpecification<Product>(new ColorSpecification(Color.Blue), new SizeSpecification(Size.Large))).ToList();
+            Assert.IsTrue(results.Count == 1);
+            Assert.IsTrue(results[0].Size == Size.Large);
         }
     }
 }
