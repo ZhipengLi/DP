@@ -112,9 +112,26 @@ namespace Sec05.Singleton37
             }[name];
         }
     }
-    [TestFixture]
-    public class SingletongTests
+
+    // ===================================================================================
+    public class Demo
     {
+        static void Main(string[] args)
+        {
+            main();
+            ReadLine();
+        }
+        static void main()
+        {
+            var db = SingletonDatabase.Instance;
+            var city = "Tokyo";
+            WriteLine($"{city} has population { db.GetPopulation(city)}");
+        }
+    }
+    [TestFixture]
+    public class Tests
+    {
+
         [Test]
         public void IsSingletonTest()
         {
@@ -157,14 +174,4 @@ namespace Sec05.Singleton37
             }
         }
     }
-    //class Program
-    //{
-    //    static void Main(string[] args)
-    //    {
-    //        var db = SingletonDatabase.Instance;
-    //        var city = "Tokyo";
-    //        WriteLine($"{city} has population { db.GetPopulation(city)}");
-    //        ReadLine();
-    //    }
-    //}
 }

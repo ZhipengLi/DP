@@ -49,8 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Sec04.Prototype29.CopyConstructors.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sec04.Prototype30.Explicit DeepCopyInterface.cs" />
+    <Compile Include="Sec04.Prototype31.PrototypeInheritance.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

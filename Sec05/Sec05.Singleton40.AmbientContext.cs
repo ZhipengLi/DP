@@ -79,7 +79,7 @@ namespace Sec05.Singleton40
     }
     class Demo
     {
-        static void Main(string[] args)
+        static void Main1(string[] args)
         {
             var house = new Building();
 

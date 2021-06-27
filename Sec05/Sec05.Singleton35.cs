@@ -39,14 +39,33 @@ namespace Sec05.Singleton35
 
         public static SingletonDatabase Instance => instance.Value;
     }
-    //class Program
-    //{
-    //    static void Main(string[] args)
-    //    {
-    //        var db = SingletonDatabase.Instance;
-    //        var city = "Tokyo";
-    //        WriteLine($"{city} has population { db.GetPopulation(city)}");
-    //        ReadLine();
-    //    }
-    //}
+
+    public class Demo
+    {
+        //static void Main(string[] args)
+        //{
+        //    main();
+        //    ReadLine();
+        //}
+        static void main()
+        {
+            var db = SingletonDatabase.Instance;
+            var city = "Tokyo";
+            WriteLine($"{city} has population { db.GetPopulation(city)}");
+        }
+    }
+
+    //==============================================================================================
+    [TestFixture]
+    public class Tests
+    {
+
+        [Test]
+        public void BasicTest()
+        {
+            //var db = SingletonDatabase.Instance;
+            //var city = "Tokyo";
+            //Assert.AreEqual(33200000, db.GetPopulation(city));
+        }
+    }
 }
