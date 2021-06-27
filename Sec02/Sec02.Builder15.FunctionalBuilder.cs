@@ -84,11 +84,11 @@ namespace Sec02.Builder15
 
     public class Demo
     {
-        static void Main(string[] args)
-        {
-            main();
-            ReadLine();
-        }
+        //static void Main(string[] args)
+        //{
+        //    main();
+        //    ReadLine();
+        //}
         static void main()
         {
             var person = new PersonBuilder()
