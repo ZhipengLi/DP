@@ -55,6 +55,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sec03", "Sec03\Sec03.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sec04", "Sec04\Sec04.csproj", "{E090EF79-9F82-479D-8F1A-4271CF51AABA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2EB964FC-CA9F-40E3-A5C4-67E534452F6D}"
+	ProjectSection(SolutionItems) = preProject
+		Practice.txt = Practice.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

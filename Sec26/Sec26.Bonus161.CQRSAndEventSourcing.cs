@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
@@ -91,6 +92,10 @@ namespace Sec26.Bonus161
     public class AgeQuery : Query
     {
         public Person Target;
+        public AgeQuery(Person p)
+        {
+            this.Target = p;
+        }
 
     }
     public class Event
@@ -150,11 +155,11 @@ namespace Sec26.Bonus161
             }
 
             int age;
-            age = eb.Query<int>(new AgeQuery { Target = p });
+            age = eb.Query<int>(new AgeQuery(p) { Target = p });
             WriteLine(age);
 
             eb.UndoLast();
-            age = eb.Query<int>(new AgeQuery { Target = p });
+            age = eb.Query<int>(new AgeQuery(p) { Target = p });
             foreach (var e in eb.AllEvents)
             {
                 WriteLine(e);
@@ -166,7 +171,30 @@ namespace Sec26.Bonus161
     [TestFixture]
     public class Tests
     {
+        [Test]
+        public void BasicClasses()
+        {
+            var ageQuery = new AgeQuery(new Person(new EventBroker())) { Result = null };
+            Assert.IsTrue(ageQuery is Query);
 
+            var command = new Command() { Register = false };
+            Assert.IsTrue(command is EventArgs);
+
+            var changeCommand = new ChangeAgeCommand(new Person(new EventBroker()), 10);
+            Assert.IsTrue(command is Command);
+
+
+            var ageChangedEvent = new AgeChangedEvent(new Person(new EventBroker()), 10, 20);
+            Assert.IsTrue(ageChangedEvent is Event);
+
+            ageChangedEvent.OldValue = 10;
+            ageChangedEvent.NewValue = 20;
+            Assert.AreEqual("Age changed from 10 to 20.", ageChangedEvent.ToString());
+
+            Type type = typeof(Person);
+            Assert.IsNotNull(type.GetMethod("BrokerOnQueries", BindingFlags.NonPublic | BindingFlags.Instance));
+            Assert.IsNotNull(type.GetMethod("BrokerOnCommands", BindingFlags.NonPublic | BindingFlags.Instance));
+        }
         [Test]
         public void BasicTest()
         {
@@ -178,6 +206,9 @@ namespace Sec26.Bonus161
 
             string output = eb.AllEvents[0].ToString();
             Assert.AreEqual(output, "Age changed from 0 to 123.");
+
+            int age = eb.Query<int>(new AgeQuery(p));
+            Assert.AreEqual(123, age);
 
             eb.UndoLast();
             Assert.IsTrue(eb.AllEvents.Count == 0);
