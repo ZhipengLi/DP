@@ -117,7 +117,7 @@ namespace Sec26.Bonus161
             return $"Age changed from {OldValue} to {NewValue}.";
         }
     }
-    public class Command : EventArgs
+    public class Command// : EventArgs
     {
         public bool Register = true;
     }
@@ -178,7 +178,7 @@ namespace Sec26.Bonus161
             Assert.IsTrue(ageQuery is Query);
 
             var command = new Command() { Register = false };
-            Assert.IsTrue(command is EventArgs);
+            //Assert.IsTrue(command is EventArgs);
 
             var changeCommand = new ChangeAgeCommand(new Person(new EventBroker()), 10);
             Assert.IsTrue(command is Command);
