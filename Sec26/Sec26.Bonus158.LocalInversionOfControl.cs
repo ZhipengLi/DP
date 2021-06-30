@@ -127,6 +127,16 @@ namespace Sec26.Bonus158
     public class Tests
     {
         [Test]
+        public void BasicTypes()
+        {
+            Assert.IsTrue(typeof(ExtensionMethods.BoolMarker<int>).IsValueType);
+            Person person = new Person();
+            ExtensionMethods.BoolMarker<Person> marker = new ExtensionMethods.BoolMarker<Person>(true, person);
+            Assert.IsTrue(person == marker.Self);
+            Assert.IsTrue(marker.Result);
+            Assert.IsTrue(marker);
+        }
+        [Test]
         public void BasicTest()
         {
             // Add to collections:
