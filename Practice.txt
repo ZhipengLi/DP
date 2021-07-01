@@ -4,3 +4,10 @@ List
 
 -08.Coomposite
 ---8.53 Neural Networks
+
+-26.Bonus
+----26.156 An ASCII CSharp String
+----26.157 Cotinuation Passing Style
+----26.158 LocalInversionOfControl
+----26.160 Beyond The Elvis Operator
+----26.161 CQRS And Event Sourcing
