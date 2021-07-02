@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Features.Metadata;
 using MoreLinq;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec08.Composite53
+namespace Sec08.Composite54
 {
     public enum Color
     {
@@ -73,10 +74,10 @@ namespace Sec08.Composite53
     public abstract class ISpecification<T>
     {
         public abstract bool IsSatisfied(T p);
-        public static ISpecification<T> operator &(ISpecification<T> first, ISpecification<T> second)
-        {
-            return new AndSpecification<T>(first, second);
-        }
+        //public static ISpecification<T> operator &(ISpecification<T> first, ISpecification<T> second)
+        //{
+        //    return new AndSpecification<T>(first, second);
+        //}
     }
 
     public interface IFilter<T>
@@ -125,7 +126,7 @@ namespace Sec08.Composite53
     // combinator
     public class AndSpecification<T> : CompositeSpecification<T>
     {
-        public AndSpecification(params ISpecification<T>[] items):base(items){}
+        public AndSpecification(params ISpecification<T>[] items) : base(items) { }
         public override bool IsSatisfied(T t)
         {
             // Any -> OrSpecification
@@ -180,6 +181,43 @@ namespace Sec08.Composite53
 
         //    ReadLine();
         //}
+    }
+
+    //============================================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void ClassTest()
+        {
+            var apple = new Product("Apple", Color.Green, Size.Small);
+            var tree = new Product("Tree", Color.Green, Size.Large);
+            var house = new Product("House", Color.Blue, Size.Large);
+
+            Product[] products = { apple, tree, house };
+
+            var bf = new BetterFilter();
+            WriteLine("Green products (new):");
+            foreach (var p in bf.Filter(products, new ColorSpecification(Color.Green)))
+            {
+                Assert.AreEqual(Color.Green, p.Color);
+            }
+
+            WriteLine("Large products");
+            foreach (var p in bf.Filter(products, new SizeSpecification(Size.Large)))
+            {
+                Assert.AreEqual(Size.Large, p.Size);
+            }
+
+            WriteLine("Large blue items");
+            foreach (var p in bf.Filter(products,
+              new AndSpecification<Product>(new ColorSpecification(Color.Blue), new SizeSpecification(Size.Large)))
+            )
+            {
+                Assert.AreEqual(Size.Large, p.Size);
+                Assert.AreEqual(Color.Blue, p.Color);
+            }
+        }
     }
 }
 
