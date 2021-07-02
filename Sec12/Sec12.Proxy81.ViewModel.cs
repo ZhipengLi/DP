@@ -21,7 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec12.Decorator81
+namespace Sec12.Proxy81
 {
     // mvvm
     // model

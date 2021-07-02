@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec17.Iterator106
+namespace Sec17.Mediator106
 {
     public class Person
     {

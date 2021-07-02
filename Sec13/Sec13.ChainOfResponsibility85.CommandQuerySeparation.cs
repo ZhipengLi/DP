@@ -20,7 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec13.Decorator86
+namespace Sec13.ChainOfResponsibility85
 {
     public class Creature
     {

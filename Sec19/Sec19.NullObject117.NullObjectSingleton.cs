@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec19.Memento117
+namespace Sec19.NullObject117
 {
     //public interface ILog
     //{

@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec12.Decorator78
+namespace Sec12.Proxy78
 {
     public class MasonrySettings
     {

@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec19.Memento111
+namespace Sec19.NullObject111
 {
     public interface ILog
     {

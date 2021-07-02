@@ -14,7 +14,7 @@ using System.Windows;
 using static System.Console;
 using System.Reactive.Linq;
 
-namespace Sec20.Memento123
+namespace Sec20.Observer123
 {
     public class Event
     { 

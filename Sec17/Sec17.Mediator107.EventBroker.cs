@@ -12,7 +12,7 @@ using Autofac;
 using static System.Console;
 
 
-namespace Sec17.Iterator107
+namespace Sec17.Mediator107
 {
     public class Actor
     {

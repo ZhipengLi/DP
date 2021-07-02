@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static System.Console;
 
-namespace Sec20.Memento122
+namespace Sec20.Observer122
 {
     public class Button
     {

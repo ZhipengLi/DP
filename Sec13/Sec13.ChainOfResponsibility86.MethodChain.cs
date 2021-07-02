@@ -21,7 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec13.Decorator87
+namespace Sec13.ChainOfResponsibility87
 {
     public class Game
     {

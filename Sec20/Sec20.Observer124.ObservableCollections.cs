@@ -15,7 +15,7 @@ using static System.Console;
 using System.Reactive.Linq;
 using System.ComponentModel;
 
-namespace Sec20.Memento124
+namespace Sec20.Observer124
 {
     //public class Market : INotifyPropertyChanged
     //{

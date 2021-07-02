@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static System.Console;
 
-namespace Sec22.State139
+namespace Sec22.Strategy139
 {
     public class Person : IComparable<Person>, IComparable
     {

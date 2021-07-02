@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec11.Decorator70
+namespace Sec11.Flyweight70
 {
     public class User
     {

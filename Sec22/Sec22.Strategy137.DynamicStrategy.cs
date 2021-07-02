@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using static System.Console;
 
-namespace Sec22.State138
+namespace Sec22.Strategy139
 {
     public enum OutputFormat
-    {
+    { 
         Markdown,
         Html
     }
@@ -57,25 +57,25 @@ namespace Sec22.State138
         {
         }
     }
-    public class TextProcessor<LS> where LS: IListStrategy, new()
+    public class TextProcessor
     {
         private StringBuilder sb = new StringBuilder();
-        private IListStrategy listStrategy = new LS();
+        private IListStrategy listStrategy;
 
-        //public void SetOutputFormat(OutputFormat format)
-        //{
-        //    switch (format)
-        //    {
-        //        case OutputFormat.Markdown:
-        //            listStrategy = new MarkdownListStrategy();
-        //            break;
-        //        case OutputFormat.Html:
-        //            listStrategy = new HtmlListStrategy();
-        //            break;
-        //        default:
-        //            throw new ArgumentNullException();
-        //    }
-        //}
+        public void SetOutputFormat(OutputFormat format)
+        {
+            switch (format)
+            {
+                case OutputFormat.Markdown:
+                    listStrategy = new MarkdownListStrategy();
+                    break;
+                case OutputFormat.Html:
+                    listStrategy = new HtmlListStrategy();
+                    break;
+                default:
+                    throw new ArgumentNullException();
+            }
+        }
         public void AppendList(IEnumerable<string> items)
         {
             listStrategy.Start(sb);
@@ -94,17 +94,22 @@ namespace Sec22.State138
     }
     public class Demo
     {
-        static void Main(string[] args)
-        {
-            main();
-            ReadLine();
-        }
+        //static void Main(string[] args)
+        //{
+        //    main();
+        //    ReadLine();
+        //}
         static void main()
         {
-            var tp = new TextProcessor<MarkdownListStrategy>();
+            var tp = new TextProcessor();
+            tp.SetOutputFormat(OutputFormat.Markdown);
             tp.AppendList(new[] { "foo", "bar", "baz" });
             WriteLine(tp);
 
+            tp.Clear();
+            tp.SetOutputFormat(OutputFormat.Html);
+            tp.AppendList(new[] { "foo", "bar", "baz" });
+            WriteLine(tp);
         }
     }
 }

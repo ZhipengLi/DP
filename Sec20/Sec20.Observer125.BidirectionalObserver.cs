@@ -17,7 +17,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Sec20.Memento125
+namespace Sec20.Observer125
 {
     public class Product : INotifyPropertyChanged
     {

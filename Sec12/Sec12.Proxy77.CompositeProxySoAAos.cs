@@ -18,7 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec12.Decorator77
+namespace Sec12.Proxy77
 {
     class Creature
     {

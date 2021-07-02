@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec12.Decorator76 
+namespace Sec12.Proxy76
 {
     public struct Percentage
     {
