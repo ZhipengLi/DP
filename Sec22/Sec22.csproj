@@ -80,10 +80,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sec22.State137.DynamicStrategy.cs" />
+    <Compile Include="Sec22.Strategy137.DynamicStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sec22.State138.StaticStrategy.cs" />
-    <Compile Include="Sec22.State139.EqualityAndComparisonStrategies.cs" />
+    <Compile Include="Sec22.Strategy138.StaticStrategy.cs" />
+    <Compile Include="Sec22.Strategy139.EqualityAndComparisonStrategies.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

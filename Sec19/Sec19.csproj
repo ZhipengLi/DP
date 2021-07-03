@@ -86,10 +86,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sec19.Memento116.NullObject.cs" />
+    <Compile Include="Sec19.NullObject116.NullObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sec19.Memento117.NullObjectSingleton.cs" />
-    <Compile Include="Sec19.Memento118.DynamicNullObject.cs" />
+    <Compile Include="Sec19.NullObject117.NullObjectSingleton.cs" />
+    <Compile Include="Sec19.NullObject118.DynamicNullObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

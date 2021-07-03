@@ -127,11 +127,11 @@ namespace Sec12.Proxy79
     }
     class Demo
     {
-        //static void Main(string[] args)
-        //{
-        //    main();
-        //    ReadLine();
-        //}
+        static void Main(string[] args)
+        {
+            main();
+            ReadLine();
+        }
         static void main()
         {
             var ba = Log<BankAccount>.As<IBankAccount>();

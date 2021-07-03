@@ -80,10 +80,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sec11.Decorator70.RepeatingUserNames.cs" />
+    <Compile Include="Sec11.Flyweight70.RepeatingUserNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sec11.Decorator71.Textformatting.cs" />
-    <Compile Include="Sec11.Decorator72.Exercise.cs" />
+    <Compile Include="Sec11.Flyweight71.TextFormatting.cs" />
+    <Compile Include="Sec11.Flyweight72.Exercise.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

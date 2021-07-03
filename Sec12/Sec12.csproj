@@ -86,15 +86,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sec12.Decorator74.ProtectionProxy.cs" />
+    <Compile Include="Sec12.Proxy74.ProtectionProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sec12.Decorator75.PropertyProxy.cs" />
-    <Compile Include="Sec12.Decorator76.ValueProxy.cs" />
-    <Compile Include="Sec12.Decorator77.CompositeProxySoAAos.cs" />
-    <Compile Include="Sec12.Decorator78.CompositeProxyWithArrayBackedProperties.cs" />
-    <Compile Include="Sec12.Decorator79.DynamicProxyForLogging.cs" />
-    <Compile Include="Sec12.Decorator81.ViewModel.cs" />
-    <Compile Include="Sec12.Decorator82.BitFragging.cs" />
+    <Compile Include="Sec12.Proxy75.PropertyProxy.cs" />
+    <Compile Include="Sec12.Proxy76.ValueProxy.cs" />
+    <Compile Include="Sec12.Proxy77.CompositeProxySoAAos.cs" />
+    <Compile Include="Sec12.Proxy78.CompositeProxyWithArrayBackedProperties.cs" />
+    <Compile Include="Sec12.Proxy79.DynamicProxyForLogging.cs" />
+    <Compile Include="Sec12.Proxy81.ViewModel.cs" />
+    <Compile Include="Sec12.Proxy82.BitFragging.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
