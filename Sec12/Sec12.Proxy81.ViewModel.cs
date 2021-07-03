@@ -3,6 +3,7 @@ using Autofac.Features.Metadata;
 using Dynamitey;
 using ImpromptuInterface;
 using MoreLinq;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,8 +41,8 @@ namespace Sec12.Proxy81
     {
         private readonly Person person;
         public PersonViewModel(Person person)
-        { 
-        
+        {
+            this.person = person;
         }
         public string FirstName
         {
@@ -52,6 +53,7 @@ namespace Sec12.Proxy81
                     return;
                 person.FirstName = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(FullName));
             }
         }
 
@@ -86,7 +88,6 @@ namespace Sec12.Proxy81
         }
         public event PropertyChangedEventHandler PropertyChanged;
 
-        //[NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged(
             [CallerMemberName] string propertyName = null)
         {
@@ -94,19 +95,52 @@ namespace Sec12.Proxy81
               new PropertyChangedEventArgs(propertyName));
         }
     }
+    //==============================================================================================
     class Demo
     {
-        //static void Main(string[] args)
-        //{
-        //    main();
-        //    ReadLine();
-        //}
+        static void Main(string[] args)
+        {
+            main();
+            ReadLine();
+        }
         static void main()
         {
+            var p = new Person() { FirstName = "first", LastName = "last" };
+            var vm = new PersonViewModel(p);
+            vm.PropertyChanged += (sender, args) => 
+            {
+                var propertyValue = sender.GetType().GetProperty(args.PropertyName).GetValue(sender);
+                WriteLine($"{args.PropertyName} has changed to {propertyValue}."); 
+            };
 
+            vm.FullName = "first1 last1";
         }
     }
 
+    //============================================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void BasicTest()
+        {
+            StringBuilder builder = new StringBuilder();
 
+            var p = new Person() { FirstName = "first", LastName = "last" };
+            var vm = new PersonViewModel(p);
+            vm.PropertyChanged += (sender, args) =>
+            {
+                var propertyValue = sender.GetType().GetProperty(args.PropertyName).GetValue(sender);
+                builder.AppendLine($"{args.PropertyName} has changed to {propertyValue}.");
+            };
+
+            vm.FullName = "first1 last1";
+            string res = builder.ToString();
+            Assert.IsTrue(res.Contains("FirstName has changed to first1."));
+            Assert.IsTrue(res.Contains("FullName has changed to first1 last."));
+            Assert.IsTrue(res.Contains("LastName has changed to last1."));
+            Assert.IsTrue(res.Contains("FullName has changed to first1 last1."));
+        }
+    }
 }
 
