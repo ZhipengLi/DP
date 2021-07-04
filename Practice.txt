@@ -1,9 +1,22 @@
 List
--05.Singleton
----5.37 Dependency Injection
 
--08.Coomposite
----8.53 Neural Networks
+-02.Builder
+----2.13 Builder
+----2.14 Fluent Builder Inheritance With Recursive Generics
+----2.15 Functional Builder
+----2.16 Facade Builder
+-03.Factory
+----03.24 Abstract Factory
+
+-05.Singleton
+----5.37 Dependency Injection
+
+-08.Composite
+----8.53 Neural Networks
+-09. Decorator
+----9.58 Adapter Decorator
+-12.Proxy
+----12.81 View Model
 
 -26.Bonus
 ----26.156 An ASCII CSharp String

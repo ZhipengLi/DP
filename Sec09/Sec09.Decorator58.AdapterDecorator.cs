@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Features.Metadata;
 using MoreLinq;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,12 +37,13 @@ namespace Sec09.Decorator58
         {
             return sb.ToString();
         }
-        public MyStringBuilder Append(string str) 
+        public MyStringBuilder Append(string str)
         {
             this.sb.Append(str);
             return this;
         }
     }
+    //==============================================================================================
     //public class Demo
     //{
     //    static void Main(string[] args)
@@ -53,5 +55,18 @@ namespace Sec09.Decorator58
     //        ReadLine();
     //    }
     //}
+
+    //============================================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void BasicTest()
+        {
+            MyStringBuilder s = "hello";
+            s += " world";
+            Assert.AreEqual("hello world", s.ToString());
+        }
+    }
 }
 

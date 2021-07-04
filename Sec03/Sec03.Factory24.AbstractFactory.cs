@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static System.Console;
 
-namespace Sec03.Builder24
+namespace Sec03.Factory24
 {
     public interface IHotDrink
     {

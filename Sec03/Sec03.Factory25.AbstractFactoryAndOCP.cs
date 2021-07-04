@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static System.Console;
 
-namespace Sec03.Builder25
+namespace Sec03.Factory25
 {
 
     public interface IHotDrink
