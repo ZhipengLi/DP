@@ -13,10 +13,15 @@ List
 
 -08.Composite
 ----8.53 Neural Networks
+----8.54 Composite Specification
+
 -09. Decorator
 ----9.58 Adapter Decorator
 -12.Proxy
 ----12.81 View Model
+-13.Chain of Responsibility
+----13.86 Method Chain
+----13.86 Broker Chain
 
 -26.Bonus
 ----26.156 An ASCII CSharp String

@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Autofac.Features.Metadata;
 using MoreLinq;
-using Sec13.Decorator86;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,183 +21,133 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Sec13.ChainOfResponsibility87
+namespace Sec13.ChainOfResponsibility86
 {
-    public class Game
-    {
-        public event EventHandler<Query> Queries;
-        public void PerformQuery(object sender, Query q)
-        {
-            Queries?.Invoke(sender, q);
-        }
-    }
-    public class Query
-    {
-        public string CreatureName;
-        public enum Argument
-        {
-            Attack, Defense
-        }
-        public Argument WhatToQuery;
-        public int Value;
-        public Query(string creatureName, Argument whatToQuery, int value)
-        {
-            CreatureName = creatureName ?? throw new ArgumentNullException();
-            WhatToQuery = whatToQuery;
-            Value = value;
-        }
-    }
-
     public class Creature
     {
-        private Game game;
         public string Name;
-        private int attack, defense;
-
-        public Creature(Game game, string name, int attack, int defense)
+        public int Attack, Defense;
+        public Creature(string name, int attack, int defense)
         {
-            this.game = game;
-            this.Name = name;
-            this.attack = attack;
-            this.defense = defense;
-        }
-        public int Attack
-        {
-            get
-            {
-                var q = new Query(Name, Query.Argument.Attack, attack);
-                game.PerformQuery(this, q);
-                return q.Value;
-            }
-        }
-        public int Defense
-        {
-            get
-            {
-                var q = new Query(Name, Query.Argument.Defense, defense);
-                game.PerformQuery(this, q);
-                return q.Value;
-            }
+            this.Name = name ?? throw new ArgumentNullException(paramName: nameof(name));
+            this.Attack = attack;
+            this.Defense = defense;
         }
         public override string ToString()
         {
-            return $"{nameof(Name)}: {Name}, {nameof(Attack)}: {Attack}, {nameof(defense)}: {Defense}";
+            return $"{nameof(Name)}: {Name}, {nameof(Attack)}: {Attack}, {nameof(Defense)}: {Defense}";
         }
     }
 
-    public abstract class CreatureModifier : IDisposable
+    public class CreatureModifier
     {
-        private Game game;
         protected Creature creature;
-        public CreatureModifier(Game game, Creature creature)
+        protected CreatureModifier next; // linked list
+
+        public CreatureModifier(Creature creature)
         {
-            this.game = game;
-            this.creature = creature;
-            game.Queries += Handle;
+            this.creature = creature ?? throw new ArgumentNullException();
         }
-        protected abstract void Handle(object sender, Query q);
-        public void Dispose()
+
+        public void Add(CreatureModifier cm)
         {
-            game.Queries -= Handle;
+            if (next != null)
+                next.Add(cm);
+            else
+                next = cm;
+        }
+        public virtual void Handle() => next?.Handle();
+    }
+
+    public class DoubleAttackModiifer : CreatureModifier
+    {
+        public DoubleAttackModiifer(Creature creature) : base(creature)
+        {
+
+        }
+        public override void Handle()
+        {
+            WriteLine($"Doubleing {creature.Name}'s attack");
+            creature.Attack *= 2;
+            base.Handle();
         }
     }
 
-    public class DoubleAttackModifier : CreatureModifier
+    public class NoBonusesModifier : CreatureModifier
     {
-        public DoubleAttackModifier(Game game, Creature creature) : base(game, creature)
+        public NoBonusesModifier(Creature creature) : base(creature)
         { }
-        protected override void Handle(object sender, Query q)
+        public override void Handle()
         {
-            if (q.CreatureName == creature.Name
-                && q.WhatToQuery == Query.Argument.Attack)
-                q.Value *= 2;
         }
     }
-    public class IncreaseDefenseModifier : CreatureModifier
+    public class IncreasedDefenseModifier : CreatureModifier
     {
-        public IncreaseDefenseModifier(Game game, Creature creature) : base(game, creature)
+        public IncreasedDefenseModifier(Creature creature) : base(creature)
         { }
-        protected override void Handle(object sender, Query q)
+
+        public override void Handle()
         {
-            if (q.CreatureName == creature.Name
-                && q.WhatToQuery == Query.Argument.Defense)
-                q.Value += 3;
+            WriteLine($"Increasing {creature.Name}'s defense");
+            creature.Defense += 3;
+            base.Handle();
         }
     }
+
+    //=============================================================================
     class Demo
     {
-        static void Main(string[] args)
-        {
-            main();
-            ReadLine();
-        }
+        //static void Main(string[] args)
+        //{
+        //    main();
+        //    ReadLine();
+        //}
         static void main()
         {
-            var game = new Game();
-            var goblin = new Creature(game, "strong goblin",3 ,2 );
+            var goblin = new Creature("Goblin", 2, 2);
             WriteLine(goblin);
 
-            using (new DoubleAttackModifier(game, goblin))
-            {
-                WriteLine(goblin);
-                using (new IncreaseDefenseModifier(game, goblin))
-                {
-                    WriteLine(goblin);
-                }
-            }
+            var root = new CreatureModifier(goblin);
+            //root.Add(new NoBonusesModifier(goblin));
+            root.Add(new DoubleAttackModiifer(goblin));
+            root.Add(new IncreasedDefenseModifier(goblin));
+
+            root.Handle();
+
             WriteLine(goblin);
 
+        }
+    }
+    //=============================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void BasicTest()
+        {
+            var goblin = new Creature("Goblin", 2, 2);
+            WriteLine(goblin);
+
+            var root = new CreatureModifier(goblin);
+            //root.Add(new NoBonusesModifier(goblin));
+            root.Add(new DoubleAttackModiifer(goblin));
+            root.Add(new IncreasedDefenseModifier(goblin));
+            root.Handle();
+
+            Assert.AreEqual("Name: Goblin, Attack: 4, Defense: 5", goblin.ToString());
+
+            goblin = new Creature("Goblin", 2, 2);
+            WriteLine(goblin);
+
+            goblin = new Creature("Goblin", 2, 2);
+            root = new CreatureModifier(goblin);
+            root.Add(new NoBonusesModifier(goblin));
+            root.Add(new DoubleAttackModiifer(goblin));
+            root.Add(new IncreasedDefenseModifier(goblin));
+            root.Handle();
+
+            Assert.AreEqual("Name: Goblin, Attack: 2, Defense: 2", goblin.ToString());
         }
     }
 }
-
-//  namespace Coding.Exercise
-//{
-//    public abstract class Creature
-//    {
-//        public Game game;
-//        public virtual int Attack { get; set; }
-//        public virtual int Defense { get; set; }
-//        public Creature(Game game)
-//        {
-//            this.game = game;
-//            //this.game.Creatures.Add(this);
-//        }
-//    }
-
-//    public class Goblin : Creature
-//    {
-//        public Goblin(Game game): base(game)
-//        {
-//            Attack = 1;
-//            Defense = 1;
-//        }
-//        public override int Attack
-//        {
-//            get => (this.game.Creatures.Any(c => c is GoblinKing)) ? (base.Attack + 1) : base.Attack;
-//            set => base.Attack = value;
-//        }
-//        public override int Defense
-//        { 
-//            get => base.Defense + this.game.Creatures.Count - 1;
-//            set => base.Defense = value;
-//        }
-//    }
-
-//    public class GoblinKing : Goblin
-//    {
-//        public GoblinKing(Game game) : base(game)
-//        {
-//            Attack = 3;
-//            Defense = 3;
-//        }
-
-//    }
-
-//    public class Game
-//    {
-//        public IList<Creature> Creatures;
-//    }
-//}
-
 
