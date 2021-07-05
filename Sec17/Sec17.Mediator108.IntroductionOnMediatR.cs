@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using MediatR;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,22 +28,24 @@ namespace Sec17.Mediator108
     }
 
     //[usedImplicitly]
-    public class PingCommadnHandler : IRequestHandler<PingCommand, PongResponse>
+    public class PingCommandHandler : IRequestHandler<PingCommand, PongResponse>
     {
         public async Task<PongResponse> Handle(PingCommand request, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(new PongResponse(DateTime.UtcNow))
+            return await Task.FromResult(new PongResponse(DateTime.Parse("Jan 1, 2019")))
                 .ConfigureAwait(false);
         }
     }
-    class Demo
+
+    //==============================================================================================
+    public class Demo
     {
         static async Task Main(string[] args)
         {
             await mainAsync();
             ReadLine();
         }
-        static async Task mainAsync()
+        public static async Task<string> mainAsync()
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<Mediator>()
@@ -62,8 +65,26 @@ namespace Sec17.Mediator108
             var mediator = container.Resolve<IMediator>();
             var response = await mediator.Send(new PingCommand());
 
+            // 1/1/2019 12:00:00 AM
             WriteLine($"we got a response at {response.Timestamp}");
+            return await Task.FromResult(response.Timestamp.ToString());
         }
     }
-
+    //================================================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void ClassTest()
+        {
+            PingCommandHandler command = new PingCommandHandler();
+            Assert.IsTrue(command is IRequestHandler<PingCommand, PongResponse>);
+        }
+        [Test]
+        public async Task BasicTest()
+        {
+            var res = await Demo.mainAsync();
+            Assert.AreEqual("1/1/2019 12:00:00 AM", res);
+        }
+    }
 }
