@@ -59,9 +59,9 @@ namespace Sec13.ChainOfResponsibility86
         public virtual void Handle() => next?.Handle();
     }
 
-    public class DoubleAttackModiifer : CreatureModifier
+    public class DoubleAttackModifier : CreatureModifier
     {
-        public DoubleAttackModiifer(Creature creature) : base(creature)
+        public DoubleAttackModifier(Creature creature) : base(creature)
         {
 
         }
@@ -109,7 +109,7 @@ namespace Sec13.ChainOfResponsibility86
 
             var root = new CreatureModifier(goblin);
             //root.Add(new NoBonusesModifier(goblin));
-            root.Add(new DoubleAttackModiifer(goblin));
+            root.Add(new DoubleAttackModifier(goblin));
             root.Add(new IncreasedDefenseModifier(goblin));
 
             root.Handle();
@@ -130,7 +130,7 @@ namespace Sec13.ChainOfResponsibility86
 
             var root = new CreatureModifier(goblin);
             //root.Add(new NoBonusesModifier(goblin));
-            root.Add(new DoubleAttackModiifer(goblin));
+            root.Add(new DoubleAttackModifier(goblin));
             root.Add(new IncreasedDefenseModifier(goblin));
             root.Handle();
 
@@ -142,7 +142,7 @@ namespace Sec13.ChainOfResponsibility86
             goblin = new Creature("Goblin", 2, 2);
             root = new CreatureModifier(goblin);
             root.Add(new NoBonusesModifier(goblin));
-            root.Add(new DoubleAttackModiifer(goblin));
+            root.Add(new DoubleAttackModifier(goblin));
             root.Add(new IncreasedDefenseModifier(goblin));
             root.Handle();
 
