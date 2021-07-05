@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,24 @@ namespace Coding.Exercise
                         yield return t;
                 }
             }
+        }
+    }
+    //=============================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void BasicTest()
+        {
+            Node<int> root = new Node<int>(1);
+            root.Left = new Node<int>(2);
+            root.Right = new Node<int>(3);
+            StringBuilder builder = new StringBuilder();
+            foreach (var value in root.PreOrder)
+            {
+                builder.Append(value);
+            }
+            Assert.AreEqual("123", builder.ToString());
         }
     }
 }

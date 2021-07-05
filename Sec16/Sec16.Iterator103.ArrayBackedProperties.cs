@@ -48,20 +48,20 @@ namespace Sec16.Iterator103
     {
         static void Main(string[] args)
         {
-            main();
-            ReadLine();
+            //main();
+            //ReadLine();
         }
-        static void main()
-        {
-            var root = new Node<int>(1, new Node<int>(2), new Node<int>(3));
-            var it = new InOrderIterator<int>(root);
-            while (it.ModeNext())
-            {
-                WriteLine(it.Current.Value);
-                WriteLine(',');
-            }
-            WriteLine();
-        }
+        //static void main()
+        //{
+        //    var root = new Node<int>(1, new Node<int>(2), new Node<int>(3));
+        //    var it = new InOrderIterator<int>(root);
+        //    while (it.ModeNext())
+        //    {
+        //        WriteLine(it.Current.Value);
+        //        WriteLine(',');
+        //    }
+        //    WriteLine();
+        //}
     }
 
 }

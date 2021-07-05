@@ -22,6 +22,8 @@ List
 -13.Chain of Responsibility
 ----13.86 Method Chain
 ----13.86 Broker Chain
+-16. Iterator
+----16.104 Exercise
 
 -26.Bonus
 ----26.156 An ASCII CSharp String
