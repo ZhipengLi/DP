@@ -2,6 +2,7 @@
 using Autofac.Features.Metadata;
 using ImpromptuInterface;
 using MoreLinq;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +25,6 @@ namespace Sec12.Proxy79
         void Deposit(int amount);
         bool Withdraw(int amount);
         string ToString();
-
     }
     public class BankAccount : IBankAccount
     {
@@ -125,13 +125,15 @@ namespace Sec12.Proxy79
             return $"{Info}\n{subject}";
         }
     }
+
+    //================================================================================================
     class Demo
     {
-        //static void Main(string[] args)
-        //{
-        //    main();
-        //    ReadLine();
-        //}
+        static void Main(string[] args)
+        {
+            main();
+            ReadLine();
+        }
         static void main()
         {
             var ba = Log<BankAccount>.As<IBankAccount>();
@@ -140,6 +142,30 @@ namespace Sec12.Proxy79
             ba.Withdraw(50);
 
             WriteLine(ba);
+        }
+    }
+
+    //================================================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void ClassTest()
+        {
+            var log = new Log<BankAccount>(new BankAccount());
+            Assert.IsTrue(log is DynamicObject);
+            Assert.IsTrue(log.Info is string);
+        }
+        [Test]
+        public void BasicTest()
+        {
+            var ba = Log<BankAccount>.As<IBankAccount>();
+
+            ba.Deposit(100);
+            ba.Withdraw(50);
+
+            Assert.IsTrue(ba.ToString().Contains("Deposit called 1 time(s)"));
+            Assert.IsTrue(ba.ToString().Contains("Withdraw called 1 time(s)"));
         }
     }
 }

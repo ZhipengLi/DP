@@ -98,11 +98,11 @@ namespace Sec12.Proxy81
     //==============================================================================================
     class Demo
     {
-        static void Main(string[] args)
-        {
-            main();
-            ReadLine();
-        }
+        //static void Main(string[] args)
+        //{
+        //    main();
+        //    ReadLine();
+        //}
         static void main()
         {
             var p = new Person() { FirstName = "first", LastName = "last" };
