@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Autofac.Core.Activators;
-using Sec20.Memento121;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,17 +12,23 @@ using System.Threading.Tasks;
 using System.Windows;
 using static System.Console;
 using System.Reactive.Linq;
+using NUnit.Framework;
 
 namespace Sec20.Observer123
 {
     public class Event
-    { 
-        
+    {
+
     }
     public class FallsIllEvent : Event
     {
         public string Address;
-        
+
+    }
+    public class RecoveryEvent : Event
+    {
+        public string Address;
+
     }
     public class Person : IObservable<Event>
     {
@@ -43,6 +48,13 @@ namespace Sec20.Observer123
                 s.Observer.OnNext(new FallsIllEvent { Address = "123 London Rd" });
             }
         }
+        public void Recover()
+        {
+            foreach (var s in subscriptions)
+            {
+                s.Observer.OnNext(new RecoveryEvent { Address = "321 New York Rd" });
+            }
+        }
         private class Subscription : IDisposable
         {
             private readonly Person person;
@@ -60,6 +72,8 @@ namespace Sec20.Observer123
     }
     public class Demo : IObserver<Event>
     {
+        public List<string> Logs = new List<string>();
+        public Person Person;
         //static void Main(string[] args)
         //{
         //    main();
@@ -68,22 +82,31 @@ namespace Sec20.Observer123
         static void main()
         {
             var d = new Demo();
+            d.TriggerFallIll();
+            d.TriggerRecovery();
         }
 
         public Demo()
         {
-            var person = new Person();
-            //IDisposable sub = person.Subscribe(this);
-            //person.FallIll();
+            this.Person = new Person();
+            IDisposable sub = Person.Subscribe(this);
 
-
-            person.OfType<FallsIllEvent>()
+            Person.OfType<FallsIllEvent>()
                 .Subscribe(
-                    args => Console.WriteLine($"A doctor is required at {args.Address}")
+                    args =>
+                    {
+                        Console.WriteLine($"A doctor is required at {args.Address}");
+                        Logs.Add($"A doctor is required at {args.Address}");
+                    }
                 );
-
-            person.FallIll();
-
+        }
+        public void TriggerFallIll()
+        {
+            this.Person.FallIll();
+        }
+        public void TriggerRecovery()
+        {
+            this.Person.Recover();
         }
 
         public void OnCompleted() { }
@@ -92,11 +115,39 @@ namespace Sec20.Observer123
 
         public void OnNext(Event value)
         {
-            if (value is FallsIllEvent args)
+            if (value is RecoveryEvent args)
             {
-                Console.WriteLine($"A doctor is requires at {args.Address}");
+                Console.WriteLine($"The patient recovers at {args.Address}");
+                Logs.Add($"The patient recovers at {args.Address}");
             }
         }
     }
+    //=============================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void ClassTest()
+        {
+            Person p = new Person();
+            Assert.IsTrue(p is IObservable<Event>);
+            Assert.AreEqual("HashSet`1", p.GetType().GetField("subscriptions",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .FieldType.Name);
+            Assert.IsTrue(p.GetType().GetNestedType("Subscription",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetInterfaces().Contains(typeof(IDisposable)));
 
+            Demo d = new Demo();
+            Assert.IsTrue(d is IObserver<Event>);
+        }
+        [Test]
+        public void BasicTest()
+        {
+            var demo = new Demo();
+            demo.TriggerFallIll();
+            Assert.AreEqual("A doctor is required at 123 London Rd", demo.Logs.LastOrDefault());
+            demo.TriggerRecovery();
+            Assert.AreEqual("The patient recovers at 321 New York Rd", demo.Logs.LastOrDefault());
+        }
+    }
 }

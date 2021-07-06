@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Autofac.Core.Activators;
-using Sec20.Memento121;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +15,7 @@ using System.Reactive.Linq;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
+using NUnit.Framework;
 
 namespace Sec20.Observer125
 {
@@ -106,6 +106,8 @@ namespace Sec20.Observer125
             disposed = true;
         }
     }
+
+    //=========================================================================================
     public class Demo
     {
         static void Main(string[] args)
@@ -151,4 +153,48 @@ namespace Sec20.Observer125
         }
     }
 
+    //=============================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void ClassTest()
+        {
+            var product = new Product { Name = "Book" };
+            var window = new Window { ProductName = "Book" };
+            Assert.IsTrue(product is INotifyPropertyChanged);
+            Assert.IsTrue(window is INotifyPropertyChanged);
+
+            var binding = new BidirectionalBinding(
+                    product,
+                    () => product.Name,
+                    window,
+                    () => window.ProductName
+                );
+            Assert.IsTrue(binding is IDisposable);
+        }
+        [Test]
+        public void BasicTest()
+        {
+            var product = new Product { Name = "Book" };
+            var window = new Window { ProductName = "Book" };
+
+            using (var binding = new BidirectionalBinding(
+                    product,
+                    () => product.Name,
+                    window,
+                    () => window.ProductName
+                ))
+            {
+                product.Name = "Smart Book";
+                Assert.AreEqual("Product : Smart Book", product.ToString());
+                Assert.AreEqual("Window : Smart Book", window.ToString());
+
+                window.ProductName = "Really smart book";
+                Assert.AreEqual("Product : Really smart book", product.ToString());
+                Assert.AreEqual("Window : Really smart book", window.ToString());
+
+            }
+        }
+    }
 }
