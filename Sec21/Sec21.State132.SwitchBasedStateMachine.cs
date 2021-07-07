@@ -24,11 +24,11 @@ namespace Sec21.State132
 
     public class Demo
     {
-        static void Main(string[] args)
-        {
-            main();
-            ReadLine();
-        }
+        //static void Main(string[] args)
+        //{
+        //    main();
+        //    ReadLine();
+        //}
         static void main()
         {
             string code = "1234";

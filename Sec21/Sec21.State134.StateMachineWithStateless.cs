@@ -31,11 +31,11 @@ namespace Sec21.State134
     }
     public class Demo
     {
-        static void Main(string[] args)
-        {
-            main();
-            ReadLine();
-        }
+        //static void Main(string[] args)
+        //{
+        //    main();
+        //    ReadLine();
+        //}
         static void main()
         {
             var stateMachine = new StateMachine<Health, Activity>(Health.NonReproductive);

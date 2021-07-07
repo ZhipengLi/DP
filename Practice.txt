@@ -28,7 +28,14 @@ List
 -17. Mediator
 ----17.107 Event Broker
 ----17.108 Introduction On MediatR
-
+-20. Observer
+----20.123 ObserverKV Via Special Interface
+----20.125 Bidirectional Observer
+-21. State
+----21.130 Classic Implementation
+-23. Template
+----23.142 Template Method
+----23.143 Functional Template Method
 -26.Bonus
 ----26.156 An ASCII CSharp String
 ----26.157 Cotinuation Passing Style

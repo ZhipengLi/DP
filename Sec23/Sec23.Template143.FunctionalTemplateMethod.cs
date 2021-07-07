@@ -1,4 +1,5 @@
 ﻿using Autofac.Core.Activators;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Sec23.TemplateMethod143
 {
     public static class GameTemplate
     {
-        public static void Run(
+        public static string Run(
             Action start,
             Action takeTurn,
             Func<bool> haveWinner,
@@ -26,15 +27,18 @@ namespace Sec23.TemplateMethod143
             while (!haveWinner())
                 takeTurn();
             WriteLine($"Player {winningPlayer()} wins.");
+            return $"Player {winningPlayer()} wins.";
         }
     }
+
+    //=============================================================================
     public class Demo
     {
-        static void Main(string[] args)
-        {
-            main();
-            ReadLine();
-        }
+        //static void Main(string[] args)
+        //{
+        //    main();
+        //    ReadLine();
+        //}
         static void main()
         {
             var numberOfPlayers = 2;
@@ -60,6 +64,39 @@ namespace Sec23.TemplateMethod143
                 return currentPlayer;
             }
             GameTemplate.Run(Start, TakeTurn, HaveWinner, WinningPlayer);
+        }
+    }
+
+    //=============================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void ClassTest()
+        {
+            var numberOfPlayers = 2;
+            int currentPlayer = 0;
+            int turn = 1, maxTurns = 10;
+            void Start()
+            {
+                WriteLine("Starting a game of chess with {numberOfPlayers} players.");
+            }
+
+            bool HaveWinner()
+            {
+                return turn == maxTurns;
+            }
+
+            void TakeTurn()
+            {
+                WriteLine($"Turn {turn++} taken by player {currentPlayer}.");
+                currentPlayer = (currentPlayer + 1) % numberOfPlayers;
+            }
+            int WinningPlayer()
+            {
+                return currentPlayer;
+            }
+            Assert.AreEqual("Player 1 wins.", GameTemplate.Run(Start, TakeTurn, HaveWinner, WinningPlayer));
         }
     }
 }
