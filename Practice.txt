@@ -17,25 +17,39 @@ List
 
 -09. Decorator
 ----9.58 Adapter Decorator
+
 -12. Proxy
 ----12.79 Dynamic Proxy For Logging
 ----12.81 View Model
+
 -13. Chain of Responsibility
 ----13.86 Method Chain
 ----13.86 Broker Chain
+
 -16. Iterator
 ----16.104 Exercise
+
 -17. Mediator
 ----17.107 Event Broker
 ----17.108 Introduction On MediatR
+
 -20. Observer
 ----20.123 ObserverKV Via Special Interface
 ----20.125 Bidirectional Observer
+
 -21. State
 ----21.130 Classic Implementation
+
 -23. Template
 ----23.142 Template Method
 ----23.143 Functional Template Method
+
+-24. Visitor
+----24.147 Rfeflection Based Printing
+----24.148 Classic Visitor Double Dispatch
+----24.149 Dynamic Visitor Via The DLR
+----24.150 Acyclic Visitor
+
 -26.Bonus
 ----26.156 An ASCII CSharp String
 ----26.157 Cotinuation Passing Style

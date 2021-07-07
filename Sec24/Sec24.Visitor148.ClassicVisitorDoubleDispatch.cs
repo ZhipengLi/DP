@@ -1,4 +1,5 @@
 ﻿using Autofac.Core.Activators;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -91,13 +92,15 @@ namespace Sec24.Visitor148
             Result = a + b;
         }
     }
+
+    //=============================================================================
     public class Demo
     {
-        //static void Main(string[] args)
-        //{
-        //    main();
-        //    ReadLine();
-        //}
+        static void Main(string[] args)
+        {
+            main();
+            ReadLine();
+        }
         static void main()
         {
             var e = new AdditionExpression(
@@ -115,6 +118,41 @@ namespace Sec24.Visitor148
             var calc = new ExpressionCalculator();
             calc.Visit(e);
             WriteLine($"{ep} = {calc.Result}");
+        }
+    }
+
+    //=============================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void BasicTest()
+        {
+            Assert.IsTrue(typeof(IExpressionVisitor).IsInterface);
+            Assert.IsTrue(typeof(Expression).IsAbstract);
+            Assert.IsNotNull(typeof(Expression).GetMethod("Accept"));
+            Assert.IsTrue(new DoubleExpression(1) is Expression);
+            Assert.IsTrue(new ExpressionPrinter() is IExpressionVisitor);
+            Assert.IsTrue(new ExpressionCalculator() is IExpressionVisitor);
+        }
+        [Test]
+        public void ClassTest()
+        {
+            var e = new AdditionExpression(
+                        new DoubleExpression(1),
+                        new AdditionExpression(
+                            new DoubleExpression(2),
+                            new DoubleExpression(3)
+                            )
+                    );
+            //var sb = new StringBuilder();
+            var ep = new ExpressionPrinter();
+            ep.Visit(e);
+            Assert.AreEqual("(1+(2+3))", ep.ToString());
+
+            var calc = new ExpressionCalculator();
+            calc.Visit(e);
+            Assert.AreEqual(6, calc.Result);
         }
     }
 }

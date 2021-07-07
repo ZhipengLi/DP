@@ -1,4 +1,5 @@
 ﻿using Autofac.Core.Activators;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -75,6 +76,8 @@ namespace Sec24.Visitor147
         //    }
         //}
     }
+
+    //=============================================================================
     public class Demo
     {
         //static void Main(string[] args)
@@ -85,15 +88,42 @@ namespace Sec24.Visitor147
         static void main()
         {
             var e = new AdditionExpression(
-            new DoubleExpression(1),
-            new AdditionExpression(
-                new DoubleExpression(2),
-                new DoubleExpression(3)
-                )
+                new DoubleExpression(1),
+                new AdditionExpression(
+                    new DoubleExpression(2),
+                    new DoubleExpression(3)
+                    )
                 );
             var sb = new StringBuilder();
             e.Print(sb);
             WriteLine(sb);
+        }
+    }
+
+    //=============================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void ClassTest()
+        {
+            Assert.IsTrue(typeof(Expression).IsAbstract);
+            DictType dictType = new DictType();
+            Assert.IsTrue(dictType is Dictionary<Type, Action<Expression, StringBuilder>>);
+        }
+        [Test]
+        public void BasicTest()
+        {
+            var e = new AdditionExpression(
+                new DoubleExpression(1),
+                new AdditionExpression(
+                    new DoubleExpression(2),
+                    new DoubleExpression(3)
+                    )
+                    );
+            var sb = new StringBuilder();
+            e.Print(sb);
+            Assert.AreEqual("(1+(2+3))", sb.ToString());
         }
     }
 }
