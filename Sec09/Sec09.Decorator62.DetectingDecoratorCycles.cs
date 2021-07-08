@@ -122,7 +122,7 @@ namespace Sec09.Decorator62
         {
             var sb = new StringBuilder($"{shape.AsString()}");
 
-            if (policy.ApplicationAllowed(types[0], types.Skip(1).ToList()))
+            if (policy.ApplicationAllowed(types.Last(), types.SkipLast(1).ToList()))
             {
                 sb.Append($" has the color {color}");
             }
