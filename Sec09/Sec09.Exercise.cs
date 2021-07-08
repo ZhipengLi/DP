@@ -95,11 +95,11 @@ namespace Sec09.Exercise
             return res;
         }
 
-        static void Main(string[] args)
-        {
-            main();
-            ReadLine();
-        }
+        //static void Main(string[] args)
+        //{
+        //    main();
+        //    ReadLine();
+        //}
         static void main()
         {
             MagicSquareGenerator msg = new MagicSquareGenerator();

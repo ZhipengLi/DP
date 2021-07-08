@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Features.Metadata;
 using MoreLinq;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,35 +29,26 @@ namespace Sec09.Decorator62
         {
             this.radius = radius;
         }
-        public void Resize(float factor)
-        {
-            radius *= factor;
-        }
+        //public void Resize(float factor)
+        //{
+        //    radius *= factor;
+        //}
         public override string AsString() => $"A circle with radius {radius}";
     }
-    public class Square : Shape
-    {
-        private float side;
-        public Square(float side)
-        {
-            this.side = side;
-        }
-        public override string AsString() => $"A square with side {side}";
-    }
 
-    public abstract class ShapeDecotrator : Shape
+    public abstract class ShapeDecorator : Shape
     {
         protected internal readonly List<Type> types = new List<Type>();
         protected internal Shape shape;
-        public ShapeDecotrator(Shape shape)
+        public ShapeDecorator(Shape shape)
         {
             this.shape = shape;
-            if (shape is ShapeDecotrator sd)
+            if (shape is ShapeDecorator sd)
                 types.AddRange(sd.types);
         }
     }
 
-    public abstract class ShapeDecorator<TSelf, TCyclePolicy> : ShapeDecotrator
+    public abstract class ShapeDecorator<TSelf, TCyclePolicy> : ShapeDecorator
         where TCyclePolicy : ShapeDecoratorCyclePolicy, new()
     {
         protected readonly TCyclePolicy policy = new TCyclePolicy();
@@ -67,13 +59,13 @@ namespace Sec09.Decorator62
         }
     }
 
-    public class ColoredShape
-            //: ShapeDecorator<ColoredShape, ThrowOnCyclePolicy>
+    public class ColoredShapeThrowOnCycle
+            : ShapeDecorator<ColoredShapeThrowOnCycle, ThrowOnCyclePolicy>
             //: ShapeDecorator<ColoredShape, CyclesAllowedPolicy>
-            : ShapeDecorator<ColoredShape, AbsorbCyclePolicy>
+            //: ShapeDecorator<ColoredShape, AbsorbCyclePolicy>
     {
         private string color;
-        public ColoredShape(Shape shape, string color) : base(shape)
+        public ColoredShapeThrowOnCycle(Shape shape, string color) : base(shape)
         {
             this.shape = shape ?? throw new ArgumentNullException(paramName: nameof(shape));
             this.color = color ?? throw new ArgumentNullException(paramName: nameof(color));
@@ -92,17 +84,51 @@ namespace Sec09.Decorator62
         } 
     }
 
-    public class TransparentShape : Shape
+    public class ColoredShapeCyclesAllowed
+            : ShapeDecorator<ColoredShapeCyclesAllowed, CyclesAllowedPolicy>
+            //: ShapeDecorator<ColoredShape, AbsorbCyclePolicy>
     {
-        private Shape shape;
-        private float transparency;
-        public TransparentShape(Shape shape, float transparency)
+        private string color;
+        public ColoredShapeCyclesAllowed(Shape shape, string color) : base(shape)
         {
             this.shape = shape ?? throw new ArgumentNullException(paramName: nameof(shape));
-            this.transparency = transparency;
+            this.color = color ?? throw new ArgumentNullException(paramName: nameof(color));
         }
 
-        public override string AsString() => $"{shape.AsString()} has {transparency * 100.0}";
+        public override string AsString()
+        {
+            var sb = new StringBuilder($"{shape.AsString()}");
+
+            if (policy.ApplicationAllowed(types[0], types.Skip(1).ToList()))
+            {
+                sb.Append($" has the color {color}");
+            }
+
+            return sb.ToString();
+        }
+    }
+
+    public class ColoredShapeCyclesAbsorbed
+                : ShapeDecorator<ColoredShapeCyclesAbsorbed, AbsorbCyclePolicy>
+    {
+        private string color;
+        public ColoredShapeCyclesAbsorbed(Shape shape, string color) : base(shape)
+        {
+            this.shape = shape ?? throw new ArgumentNullException(paramName: nameof(shape));
+            this.color = color ?? throw new ArgumentNullException(paramName: nameof(color));
+        }
+
+        public override string AsString()
+        {
+            var sb = new StringBuilder($"{shape.AsString()}");
+
+            if (policy.ApplicationAllowed(types[0], types.Skip(1).ToList()))
+            {
+                sb.Append($" has the color {color}");
+            }
+
+            return sb.ToString();
+        }
     }
 
     public abstract class ShapeDecoratorCyclePolicy
@@ -154,20 +180,87 @@ namespace Sec09.Decorator62
         }
     }
 
+    //=============================================================================
     public class Demo
     {
-        //static void Main(string[] args)
-        //{
-        //    main();
-        //    ReadLine();
-        //}
+        static void Main(string[] args)
+        {
+            main();
+            ReadLine();
+        }
         static void main()
         {
             var circle = new Circle(2);
-            var colored1 = new ColoredShape(circle, "red");
-            var colored2 = new ColoredShape(colored1, "blue");
+            var colored1 = new ColoredShapeCyclesAbsorbed(circle, "red");
+            var colored2 = new ColoredShapeCyclesAbsorbed(colored1, "blue");
 
             WriteLine(colored2.AsString());
+        }
+    }
+
+    //=============================================================================
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void ClassTest()
+        {
+            Assert.IsTrue(typeof(Shape).IsAbstract);
+            Assert.IsNotNull(typeof(Shape).GetMethod("AsString"));
+
+            var circle = new Circle(2f);
+            Assert.AreEqual("A circle with radius 2", circle.AsString());
+            Assert.IsTrue(circle is Shape);
+
+            Assert.IsTrue(typeof(ShapeDecorator).IsAbstract);
+            Assert.IsTrue(typeof(ShapeDecorator).IsSubclassOf(typeof(Shape)));
+
+            Assert.IsTrue(typeof(ShapeDecoratorCyclePolicy).IsAbstract);
+            Assert.IsTrue(typeof(ShapeDecoratorCyclePolicy).GetMethod("TypeAdditionAllowed").IsAbstract);
+            Assert.IsTrue(typeof(ShapeDecoratorCyclePolicy).GetMethod("ApplicationAllowed").IsAbstract);
+
+            Assert.IsTrue(typeof(CyclesAllowedPolicy).IsSubclassOf(typeof(ShapeDecoratorCyclePolicy)));
+            Assert.IsTrue(typeof(ThrowOnCyclePolicy).IsSubclassOf(typeof(ShapeDecoratorCyclePolicy)));
+            Assert.IsTrue(typeof(AbsorbCyclePolicy).IsSubclassOf(typeof(ShapeDecoratorCyclePolicy)));
+
+            var colored1 = new ColoredShapeThrowOnCycle(circle, "red");
+            Assert.IsTrue(colored1 is ShapeDecorator<ColoredShapeThrowOnCycle, ThrowOnCyclePolicy>);
+        }
+        [Test]
+        public void TestThrowOnCycle()
+        {
+            var circle = new Circle(2);
+            var colored1 = new ColoredShapeThrowOnCycle(circle, "red");
+
+            try
+            {
+                var colored2 = new ColoredShapeThrowOnCycle(colored1, "blue");
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e is InvalidOperationException);
+            }
+        }
+        [Test]
+        public void TestOnCyclesAllowed()
+        {
+            var circle = new Circle(2);
+            var colored1 = new ColoredShapeCyclesAllowed(circle, "red");
+
+            var colored2 = new ColoredShapeCyclesAllowed(colored1, "blue");
+            Assert.AreEqual("A circle with radius 2 has the color red has the color blue", colored2.AsString());
+        }
+
+        //A circle with radius 2 has the color red
+        [Test]
+        public void TestOnCyclesAbsorbed()
+        {
+            var circle = new Circle(2);
+            var colored1 = new ColoredShapeCyclesAbsorbed(circle, "red");
+
+            var colored2 = new ColoredShapeCyclesAbsorbed(colored1, "blue");
+            Assert.AreEqual("A circle with radius 2 has the color red", colored2.AsString());
         }
     }
 }
