@@ -80,7 +80,7 @@ namespace Sec03.Factory24
             foreach (AvailableDrink drink in Enum.GetValues(typeof(AvailableDrink)))
             {
                 var factory = (IHotDrinkFactory)Activator.CreateInstance(
-                        Type.GetType("Sec03.Builder24."+Enum.GetName(typeof(AvailableDrink), drink)+"Factory")
+                        Type.GetType("Sec03.Factory24." + Enum.GetName(typeof(AvailableDrink), drink)+"Factory")
                     );
                 factories.Add(drink, factory);
             }
@@ -111,7 +111,14 @@ namespace Sec03.Factory24
     [TestFixture]
     public class Tests
     {
-
+        [Test]
+        public void ClassTest()
+        {
+            Assert.IsTrue(typeof(IHotDrink).IsInterface);
+            Assert.IsTrue(typeof(IHotDrinkFactory).IsInterface);
+            Assert.IsNotNull(typeof(IHotDrink).GetMethod("Consume"));
+            Assert.IsNotNull(typeof(IHotDrinkFactory).GetMethod("Prepare"));
+        }
         [Test]
         public void BasicTest()
         {
