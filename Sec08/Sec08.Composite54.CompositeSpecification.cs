@@ -190,6 +190,18 @@ namespace Sec08.Composite54
         [Test]
         public void ClassTest()
         {
+            Assert.IsTrue(typeof(ISpecification<Product>).IsAbstract);
+            Assert.IsNotNull(typeof(ISpecification<Product>).GetMethod("IsSatisfied"));
+
+            Assert.IsTrue(typeof(IFilter<Product>).IsInterface);
+            Assert.IsNotNull(typeof(IFilter<Product>).GetMethod("Filter"));
+
+            Assert.IsTrue(typeof(CompositeSpecification<Product>).IsAbstract);
+            Assert.IsTrue(typeof(ISpecification<Product>).IsAssignableFrom(typeof(CompositeSpecification<Product>)));
+        }
+        [Test]
+        public void BasicTest()
+        {
             var apple = new Product("Apple", Color.Green, Size.Small);
             var tree = new Product("Tree", Color.Green, Size.Large);
             var house = new Product("House", Color.Blue, Size.Large);
