@@ -46,7 +46,7 @@ List
 ----23.143 Functional Template Method
 
 -24. Visitor
-----24.147 Rfeflection Based Printing
+----24.147 Reflection Based Printing
 ----24.148 Classic Visitor Double Dispatch
 ----24.149 Dynamic Visitor Via The DLR
 ----24.150 Acyclic Visitor
