@@ -19,33 +19,23 @@ namespace Sec24.Visitor150
     {
         void Visit(TVisitable obj);
     }
-
-    public interface IVisitor
-    {
-
-    }
-    // 3 - DoubleExpression
-    // (1+2) (1+(2+3)) AdditionExpression
     public abstract class Expression
     {
-        public virtual void Accept(IVisitor visitor)
-        {
-            //if (visitor is IVisitor<Expression> typed)
-            //    typed.Visit(this);
-
-        }
+        public abstract void Accept(IVisitor<Expression> visitor);
     }
     public class DoubleExpression : Expression
     {
-        public double Value;
-        public DoubleExpression(double value)
+        public int Value;
+        public DoubleExpression(int value)
         {
-            Value = value;
+            this.Value = value;
         }
-        public override void Accept(IVisitor visitor)
+        public override void Accept(IVisitor<Expression> visitor)
         {
             if (visitor is IVisitor<DoubleExpression> typed)
+            {
                 typed.Visit(this);
+            }
         }
     }
     public class AdditionExpression : Expression
@@ -53,47 +43,41 @@ namespace Sec24.Visitor150
         public Expression Left, Right;
         public AdditionExpression(Expression left, Expression right)
         {
-            Left = left;
-            Right = right;
+            this.Left = left;
+            this.Right = right;
         }
-        public override void Accept(IVisitor visitor)
+        public override void Accept(IVisitor<Expression> visitor)
         {
             if (visitor is IVisitor<AdditionExpression> typed)
+            {
                 typed.Visit(this);
+            }
         }
     }
-
-    public class ExpressionPrinter : IVisitor,
-        IVisitor<Expression>,
+    public class ExpressionPrinter : IVisitor<Expression>,
         IVisitor<DoubleExpression>,
         IVisitor<AdditionExpression>
     {
-        private StringBuilder sb = new StringBuilder();
-        public void Visit(Expression obj)
+        private StringBuilder builder = new StringBuilder();
+        public void Visit(Expression e)
+        { }
+        public void Visit(DoubleExpression e)
         {
-
+            builder.Append(e.Value);
         }
-
-        public void Visit(DoubleExpression obj)
+        public void Visit(AdditionExpression e)
         {
-            sb.Append(obj.Value);
+            builder.Append("(");
+            e.Left.Accept(this);
+            builder.Append("+");
+            e.Right.Accept(this);
+            builder.Append(")");
         }
-
-        public void Visit(AdditionExpression obj)
-        {
-            sb.Append("(");
-            obj.Left.Accept(this);
-            sb.Append("+");
-            obj.Right.Accept(this);
-            sb.Append(")");
-        }
-
         public override string ToString()
         {
-            return sb.ToString();
+            return builder.ToString();
         }
     }
-
     //=============================================================================
     public class Demo
     {
@@ -128,7 +112,7 @@ namespace Sec24.Visitor150
             Assert.IsNotNull(typeof(Expression).GetMethod("Accept"));
 
             var ep = new ExpressionPrinter();
-            Assert.IsTrue(ep is IVisitor);
+            //Assert.IsTrue(ep is IVisitor);
             Assert.IsTrue(ep is IVisitor<Expression>);
             Assert.IsTrue(ep is IVisitor<DoubleExpression>);
             Assert.IsTrue(ep is IVisitor<AdditionExpression>);
