@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutofacSamples
+namespace AutofacSamples0206
 {
     public interface ILog
     {
@@ -49,7 +49,7 @@ namespace AutofacSamples
     }
     class Program
     {
-        static void Main(string[] args)
+        static void Main0206(string[] args)
         {
             var log = new ConsoleLog();
             var engine = new Engine(log);
