@@ -7,24 +7,38 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutofacSamples0320
+namespace AutofacSamples423
 {
-    public interface ILog
+    public interface ILog : IDisposable
     {
         void Write(string message);
     }
-    public interface IConsole { }
+    //public interface IConsole { }
 
-    public class ConsoleLog : ILog, IConsole
+    public class ConsoleLog : ILog
     {
+        public ConsoleLog()
+        {
+            Console.WriteLine($"Console log created at {DateTime.Now.Ticks}");
+        }
+
         public void Write(string message)
         {
             Console.WriteLine(message);
         }
+        public void Dispose()
+        {
+            Console.WriteLine($"Console log no longer required.");
+        }
+
     }
     public class EmailLog : ILog
     {
         private const string adminEmail = "admin@foo.com";
+
+        public void Dispose()
+        {
+        }
 
         public void Write(string message)
         {
@@ -53,6 +67,11 @@ namespace AutofacSamples0320
         {
             this.phoneNumber = phoneNumber;
         }
+
+        public void Dispose()
+        {
+        }
+
         public void Write(string message)
         {
             Console.WriteLine($"SMS to {phoneNumber} : {message}");
@@ -79,41 +98,37 @@ namespace AutofacSamples0320
         }
     }
 
-    public class Parent
+    public class Reporting
     {
-        public override string ToString()
+        private Lazy<ConsoleLog> log;
+        public Reporting(Lazy<ConsoleLog> log)
         {
-            return "I am your father";
+            if (log == null)
+            {
+                throw new ArgumentNullException();
+            }
+            this.log = log;
+            Console.WriteLine("Reporting component created");
         }
-    }
-    public class Child
-    {
-        public string Name { get; set; }
-        public Parent Parent { get; set; }
-
-        public void SetParent(Parent parent)
+        public void Report()
         {
-            this.Parent = parent;
-        }
-    }
-    public class ParentChildModel : Autofac.Module
-    { 
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<Parent>();
-            builder.Register(c=>new Child() { Parent = c.Resolve<Parent>() });
+            log.Value.Write("Log started");
         }
     }
     class Program
     {
-        static void Main0320(string[] args)
+        static void Main0423(string[] args)
         {
             var builder = new ContainerBuilder();
-            //builder.RegisterAssemblyModules(typeof(Program).Assembly);
-            builder.RegisterAssemblyModules<ParentChildModel>(typeof(Program).Assembly);
-            var container = builder.Build();
-            Console.WriteLine(container.Resolve<Child>().Parent);
-            Console.ReadLine();
+            builder.RegisterType<ConsoleLog>();
+            builder.RegisterType<Reporting>();
+
+            using (var c = builder.Build()) 
+            {
+                c.Resolve<Reporting>().Report();
+            }
+
+                Console.ReadLine();
         }
     }
 }

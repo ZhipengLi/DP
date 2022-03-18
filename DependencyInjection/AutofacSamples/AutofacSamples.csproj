@@ -80,6 +80,12 @@
     <Compile Include="0318.cs" />
     <Compile Include="0319.cs" />
     <Compile Include="0320.cs" />
+    <Compile Include="0423.cs" />
+    <Compile Include="0424.cs" />
+    <Compile Include="0425.cs" />
+    <Compile Include="0426.cs" />
+    <Compile Include="0427.cs" />
+    <Compile Include="0428.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

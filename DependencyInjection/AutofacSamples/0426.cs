@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Core;
+using Autofac.Features.OwnedInstances;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,24 +8,38 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutofacSamples0320
+namespace AutofacSamples
 {
-    public interface ILog
+    public interface ILog : IDisposable
     {
         void Write(string message);
     }
-    public interface IConsole { }
+    //public interface IConsole { }
 
-    public class ConsoleLog : ILog, IConsole
+    public class ConsoleLog : ILog
     {
+        public ConsoleLog()
+        {
+            Console.WriteLine($"Console log created at {DateTime.Now.Ticks}");
+        }
+
         public void Write(string message)
         {
             Console.WriteLine(message);
         }
+        public void Dispose()
+        {
+            Console.WriteLine($"Console log no longer required.");
+        }
+
     }
     public class EmailLog : ILog
     {
         private const string adminEmail = "admin@foo.com";
+
+        public void Dispose()
+        {
+        }
 
         public void Write(string message)
         {
@@ -53,6 +68,11 @@ namespace AutofacSamples0320
         {
             this.phoneNumber = phoneNumber;
         }
+
+        public void Dispose()
+        {
+        }
+
         public void Write(string message)
         {
             Console.WriteLine($"SMS to {phoneNumber} : {message}");
@@ -79,40 +99,53 @@ namespace AutofacSamples0320
         }
     }
 
-    public class Parent
+    public class Reporting1
     {
-        public override string ToString()
+        private Lazy<ConsoleLog> log;
+        public Reporting1(Lazy<ConsoleLog> log)
         {
-            return "I am your father";
+            if (log == null)
+            {
+                throw new ArgumentNullException();
+            }
+            this.log = log;
+            Console.WriteLine("Reporting component created");
+        }
+        public void Report()
+        {
+            log.Value.Write("Log started");
         }
     }
-    public class Child
+    public class Reporting
     {
-        public string Name { get; set; }
-        public Parent Parent { get; set; }
-
-        public void SetParent(Parent parent)
+        private IList<ILog> allLogs;
+        public Reporting(IList<ILog> allLogs)
         {
-            this.Parent = parent;
+            this.allLogs = allLogs;
         }
-    }
-    public class ParentChildModel : Autofac.Module
-    { 
-        protected override void Load(ContainerBuilder builder)
+        public void Report()
         {
-            builder.RegisterType<Parent>();
-            builder.Register(c=>new Child() { Parent = c.Resolve<Parent>() });
+            foreach (var log in allLogs)
+            {
+                log.Write($"Hello, this is {log.GetType().Name}");
+            }
         }
     }
     class Program
     {
-        static void Main0320(string[] args)
+        static void Main0426(string[] args)
         {
             var builder = new ContainerBuilder();
-            //builder.RegisterAssemblyModules(typeof(Program).Assembly);
-            builder.RegisterAssemblyModules<ParentChildModel>(typeof(Program).Assembly);
-            var container = builder.Build();
-            Console.WriteLine(container.Resolve<Child>().Parent);
+            builder.RegisterType<ConsoleLog>().As<ILog>();
+            builder.Register(c => new SMSLog("+12345678")).As<ILog>();
+            builder.RegisterType<Reporting>();
+
+            using (var c = builder.Build())
+            {
+                c.Resolve<Reporting>().Report();
+                Console.WriteLine("Done reporting once");
+            }
+
             Console.ReadLine();
         }
     }
