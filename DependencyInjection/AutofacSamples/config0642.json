@@ -1,0 +1,13 @@
+{
+  "defaultAssembly": "AutofacSamples",
+  "components": [
+    {
+      "type": "AutofacSamples0642.Addition",
+      "services": [ { "type": "AutofacSamples0642.IOperation" } ]
+    },
+    {
+      "type": "AutofacSamples0642.Multiplilcation",
+      "services": [ { "type": "AutofacSamples0642.IOperation" } ]
+    }
+  ]
+}

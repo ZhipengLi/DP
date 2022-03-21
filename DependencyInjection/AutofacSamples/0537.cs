@@ -1,8 +1,5 @@
 ﻿using Autofac;
 using Autofac.Core;
-using Autofac.Features.Indexed;
-using Autofac.Features.Metadata;
-using Autofac.Features.OwnedInstances;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,38 +7,32 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutofacSamples0428
+namespace AutofacSamples0537
 {
-    public interface ILog : IDisposable
+    public interface ILog
     {
         void Write(string message);
     }
-    //public interface IConsole { }
+    public interface IConsole { }
 
-    public class ConsoleLog : ILog
+    public class ConsoleLog : ILog, IConsole, IDisposable
     {
         public ConsoleLog()
         {
-            Console.WriteLine($"Console log created at {DateTime.Now.Ticks}");
+            Console.WriteLine("Constructing a console log");
         }
-
         public void Write(string message)
         {
             Console.WriteLine(message);
         }
         public void Dispose()
         {
-            Console.WriteLine($"Console log no longer required.");
+            Console.WriteLine("console log disposed");
         }
-
     }
     public class EmailLog : ILog
     {
         private const string adminEmail = "admin@foo.com";
-
-        public void Dispose()
-        {
-        }
 
         public void Write(string message)
         {
@@ -70,11 +61,6 @@ namespace AutofacSamples0428
         {
             this.phoneNumber = phoneNumber;
         }
-
-        public void Dispose()
-        {
-        }
-
         public void Write(string message)
         {
             Console.WriteLine($"SMS to {phoneNumber} : {message}");
@@ -101,55 +87,60 @@ namespace AutofacSamples0428
         }
     }
 
-    public class Reporting1
+    public class Parent
     {
-        private Lazy<ConsoleLog> log;
-        public Reporting1(Lazy<ConsoleLog> log)
+        public override string ToString()
         {
-            if (log == null)
-            {
-                throw new ArgumentNullException();
-            }
-            this.log = log;
-            Console.WriteLine("Reporting component created");
-        }
-        public void Report()
-        {
-            log.Value.Write("Log started");
+            return "I am your father";
         }
     }
-
-    public class Settings
+    public class Child
     {
-        public string LogMode { get; set; }
-
-    }
-    public class Reporting
-    {
-        IIndex<string, ILog> logs;
-        public Reporting(IIndex<string, ILog> logs)
+        public string Name { get; set; }
+        public Parent Parent { get; set; }
+        public Child()
         {
-            this.logs = logs;
+            Console.WriteLine("Child is being created");
         }
-        public void Report()
+
+        public void SetParent(Parent parent)
         {
-            logs["sms"].Write("Starting report sms");
+            this.Parent = parent;
+        }
+    }
+    public class ParentChildModule : Autofac.Module
+    {
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<Parent>();
+            builder.Register(c => new Child() { Parent = c.Resolve<Parent>() });
+        }
+    }
+    public class MyClass : IStartable
+    {
+        public MyClass()
+        {
+            Console.WriteLine("MyClass ctor");
+        }
+        public void Start()
+        {
+            Console.WriteLine("Container being built");
         }
     }
     class Program
     {
-        static void Main0428(string[] args)
+        static void Main0537(string[] args)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<ConsoleLog>().Keyed<ILog>("cmd");
-            builder.Register(c => new SMSLog("+12345678")).Keyed<ILog>("sms");
-            builder.RegisterType<Reporting>();
-            using (var c = builder.Build())
-            {
-                c.Resolve<Reporting>().Report(); 
-            }
+            builder.RegisterType<MyClass>()
+                .AsSelf()
+                .As<IStartable>()
+                .SingleInstance();
+            var container = builder.Build();
+            container.Resolve<MyClass>();
 
-                Console.ReadLine();
+            //Console.WriteLine(container.Resolve<Child>().Parent);
+            Console.ReadLine();
         }
     }
 }

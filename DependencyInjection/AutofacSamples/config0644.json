@@ -1,0 +1,8 @@
+{
+  "defaultAssembly": "AutofacSamples",
+  "modules": [
+    {
+      "type": "AutofacSamples.CalculationModule"
+    }
+  ]
+}
