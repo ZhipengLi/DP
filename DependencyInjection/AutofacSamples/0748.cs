@@ -74,7 +74,7 @@ namespace AutofacSamples0748
     }
     class Program
     {
-        static void Main(string[] args)
+        static void Main_(string[] args)
         {
             var b = new ContainerBuilder();
             b.RegisterType<SaveCommand>().As<ICommand>()
