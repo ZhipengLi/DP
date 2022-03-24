@@ -123,7 +123,7 @@ namespace AutofacSamples0747
 
     class Program
     {
-        static void Main(string[] args)
+        static void Main0747(string[] args)
         {
             var b = new ContainerBuilder();
             //b.RegisterSource(new Autofac.Features.ResolveAnything.AnyConcreteTypeNotAlreadyRegisteredSource());
