@@ -44,6 +44,13 @@ class Checker:
         print('issubclass', issubclass(Checker, Checker))
         iters = iter(self.nums)
         print('iter\'s next():', next(iters))
+        print('len(self.nums)', len(self.nums))
+        print('list():', list(('apple', 'pear', 'orange')))
+        print('locals():', locals())
+        print('map()', list(map(lambda x:x*2, self.nums)))
+        print('max()', max(self.nums))
+        print('min()', min(self.nums))
+        print('object()', dir(object()))
         
         for num in self.nums:
             print(f'bool() value of {num}:', bool(num))
@@ -52,8 +59,8 @@ class Checker:
                 print(f'bin() value of {num}:', bin(num))
     def test_method(self):
         print('this is the object method')
-list = [1,2,3,0,-1]
-checker = Checker(list)
+num_list = [1,2,3,0,-1]
+checker = Checker(num_list)
 checker.check()
 Checker.class_method = classmethod(Checker.test_method)
 Checker.class_method()
