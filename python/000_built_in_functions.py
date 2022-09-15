@@ -30,6 +30,20 @@ class Checker:
         print('float(-3):', float('-3'))
         print('format(5) in binary:', format(5,'b'))
         print('frozenset:', frozenset([1,2,3,4,5,6,7]))
+        self.name='test name'
+        print('getattr:',getattr(self, 'name'))
+        print('globals():', globals())
+        print('hasattr:', hasattr(self, 'name'))
+        print('hash(self):', hash(self))
+        #print('help:', help())
+        print('hex(255):', hex(255))
+        print('id(self):', id(self))
+        #input
+        print('int(\'020\', 16):', int('020', 16))
+        print('isinstance:', isinstance(self, Checker))
+        print('issubclass', issubclass(Checker, Checker))
+        iters = iter(self.nums)
+        print('iter\'s next():', next(iters))
         
         for num in self.nums:
             print(f'bool() value of {num}:', bool(num))
@@ -44,3 +58,4 @@ checker.check()
 Checker.class_method = classmethod(Checker.test_method)
 Checker.class_method()
 delattr(Checker, 'class_method')
+checker.name='test name'
