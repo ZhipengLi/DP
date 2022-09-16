@@ -5,6 +5,9 @@ class Checker:
     def __init__(self, nums):
         self.nums = nums
         self._address = 'unknown'
+    @staticmethod
+    def static_method():
+        return 'this is a static method'
     def check(self):
         def iterate_num(nums):
             for num in nums:
@@ -63,6 +66,15 @@ class Checker:
         print('repr:', type(repr(self)), repr(self))
         print('reversed:', list(reversed(list(range(0,10)))))
         print('round(2.675, 2)', round(2.675, 2))
+        print('set((1,2,3,1,3))', set((1,2,3,1,3)))
+        print('range(0,9)[slice(1,1)]', list(range(0,9)[slice(1,3)]))
+        print('sorted((3,1,2))', sorted((3,1,2)))
+        print('str(21.5)', str(21.5))
+        print('sum((1,2,3))', sum((1,2,3)))
+        print('tuple([1,2,3])', tuple([1,2,3]))
+        print('vars(self', vars(self))
+        print('zip(range(10), [1,2,3])', list(zip(range(10), [1,2,3])))
+        #__import__()
         
         for num in self.nums:
             print(f'bool() value of {num}:', bool(num))
@@ -77,5 +89,7 @@ checker.check()
 Checker.class_method = classmethod(Checker.test_method)
 Checker.class_method()
 delattr(Checker, 'class_method')
-checker.name='test name'
+setattr(checker, 'name', 'test name')
+#checker.name='test name'
 print('property:', checker.address)
+print(Checker.static_method())
