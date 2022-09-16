@@ -1,6 +1,10 @@
 class Checker:
+    @property
+    def address(self):
+        return self._address
     def __init__(self, nums):
         self.nums = nums
+        self._address = 'unknown'
     def check(self):
         def iterate_num(nums):
             for num in nums:
@@ -51,6 +55,14 @@ class Checker:
         print('max()', max(self.nums))
         print('min()', min(self.nums))
         print('object()', dir(object()))
+        print('0o(-56)', oct(-56))
+        #open()
+        print('ord(a):', ord('a'))
+        print('pow(2,3):', pow(2,3))
+        print('range:', list(range(0,10)))
+        print('repr:', type(repr(self)), repr(self))
+        print('reversed:', list(reversed(list(range(0,10)))))
+        print('round(2.675, 2)', round(2.675, 2))
         
         for num in self.nums:
             print(f'bool() value of {num}:', bool(num))
@@ -66,3 +78,4 @@ Checker.class_method = classmethod(Checker.test_method)
 Checker.class_method()
 delattr(Checker, 'class_method')
 checker.name='test name'
+print('property:', checker.address)
