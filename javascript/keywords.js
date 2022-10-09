@@ -1,6 +1,6 @@
 //https://www.programiz.com/javascript/keywords-identifiers
 
-class JsonCaller{
+class JsonCaller extends String{
 	getJson(){
       return new Promise((resolve) => {
       const url = 'https://jsonplaceholder.typicode.com/todos/1';
@@ -13,6 +13,9 @@ class JsonCaller{
 }
 
 //debugger
+//enum
+//export
+//import
 async function f1() {
   const caller = new JsonCaller();
   //const x = await resolveAfter2Seconds(10);
@@ -25,7 +28,7 @@ async function f1() {
 
 f1().catch(e=>{console.log('error found:', e)}).then(x=>console.log('prosmise result of x.id:', x));
 
-testArray = [true, String('2'), 3, 4]
+testArray = [true, String('2'), 100, 4]
 delete testArray[3]
 let i=0;
 do{
@@ -34,6 +37,14 @@ do{
         	continue;
     	case 'string':
         	console.log('found a string')
+        	break;
+        case 'number':
+        	if(testArray[i-1]<100){
+            	console.log('num < 100')
+            }
+            else {
+            	console.log('num>=100')
+            }
         	break;
         default:
         	console.log('other type')
