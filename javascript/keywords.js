@@ -2,12 +2,13 @@
 
 class JsonCaller extends String{
 	getJson(){
+      console.log('received string:',this.toString());
+    
       return new Promise((resolve) => {
-      const url = 'https://jsonplaceholder.typicode.com/todos/1';
-      setTimeout(() => {
-        fetch(url)
-            .then(response=>resolve(response.json()))
-      }, 2000);
+        setTimeout(() => {
+          fetch(this.toString())
+              .then(response=>resolve(response.json()))
+        }, 2000);
     });
     }
 }
@@ -17,7 +18,7 @@ class JsonCaller extends String{
 //export
 //import
 async function f1() {
-  const caller = new JsonCaller();
+  const caller = new JsonCaller('https://jsonplaceholder.typicode.com/todos/1');
   //const x = await resolveAfter2Seconds(10);
   const x = await caller.getJson();
   console.log('json object:', x);
