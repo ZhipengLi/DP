@@ -18,4 +18,16 @@ async function f1() {
   });
 }
 
-f1().then(x=>console.log('prosmise result of x.id:', x));
+f1().catch(e=>{console.log('error found:', e)}).then(x=>console.log('prosmise result of x.id:', x));
+
+testArray = [1, String('2'), 3]
+for(let i=0;i<testArray.length;i++){
+	switch(typeof(testArray[i])){
+    	case 'string':
+        	console.log(typeof(testArray[i]), 'found a string')
+        	break;
+        default:
+        	console.log(typeof(testArray[i]))
+    }
+}
+
