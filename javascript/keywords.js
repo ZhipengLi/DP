@@ -1,3 +1,5 @@
+//https://www.programiz.com/javascript/keywords-identifiers
+
 function resolveAfter2Seconds(x) {
   return new Promise((resolve) => {
     const url = 'https://jsonplaceholder.typicode.com/todos/1';
