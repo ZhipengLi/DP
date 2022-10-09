@@ -12,7 +12,7 @@ class JsonCaller{
     }
 }
 
-
+//debugger
 async function f1() {
   const caller = new JsonCaller();
   //const x = await resolveAfter2Seconds(10);
@@ -26,15 +26,17 @@ async function f1() {
 f1().catch(e=>{console.log('error found:', e)}).then(x=>console.log('prosmise result of x.id:', x));
 
 testArray = [true, String('2'), 3, 4]
+delete testArray[3]
 let i=0;
 do{
-	switch(typeof(testArray[i])){
+	switch(typeof(testArray[i++])){
+    	case 'boolean':
+        	continue;
     	case 'string':
-        	console.log(typeof(testArray[i]), 'found a string')
+        	console.log('found a string')
         	break;
         default:
-        	console.log(typeof(testArray[i]))
+        	console.log('other type')
     }
-    i+=1;
+    //i+=1;
 } while(i<testArray.length)
-
