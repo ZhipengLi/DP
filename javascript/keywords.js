@@ -1,7 +1,10 @@
 //https://www.programiz.com/javascript/keywords-identifiers
-
 class JsonCaller extends String{
 	getJson(){
+      let url = this.toString();
+      if(!url){
+       	throw new Exception("empty url string")
+      }
       console.log('received string:',this.toString());
     
       return new Promise((resolve) => {
@@ -17,9 +20,12 @@ class JsonCaller extends String{
 //enum
 //export
 //import
+//implements
+//interface
 async function f1() {
   const caller = new JsonCaller('https://jsonplaceholder.typicode.com/todos/1');
   //const x = await resolveAfter2Seconds(10);
+  console.log('caller instance of JsonCaller?', caller instanceof JsonCaller)
   const x = await caller.getJson();
   console.log('json object:', x);
   return new Promise((resolve)=>{
@@ -27,9 +33,10 @@ async function f1() {
   });
 }
 
-f1().catch(e=>{console.log('error found:', e)}).then(x=>console.log('prosmise result of x.id:', x));
+f1().catch(e=>{console.log('error found:', e)}).then(x=>console.log('prosmise result of x.id:', x)).finally(()=>{console.log('finally by promise')});
 
-testArray = [true, String('2'), 100, 4]
+testArray = [true, String('2'), 100, 4, false]
+console.log('2 in testArray?', '2' in testArray)
 delete testArray[3]
 let i=0;
 do{
