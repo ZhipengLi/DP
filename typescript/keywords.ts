@@ -3,7 +3,10 @@
 interface Todo{
   id:number
 }
-class JsonCaller extends String{ 
+interface ICaller{
+  getJson():Promise<Todo>;
+}
+class JsonCaller extends String implements ICaller{ 
 	  static staticMethod():void{
     	console.log("called from static method")
     }
