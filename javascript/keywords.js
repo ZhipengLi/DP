@@ -10,9 +10,10 @@ class JsonCaller extends String{
     getJson(){
       let url = this.toString();
       if(!url){
-       	throw new Exception("empty url string")
+       	throw new Error("empty url string")
       }
-      console.log('received string:',this.toString());
+      
+      console.log('received string:', this.toString());
     
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -36,6 +37,7 @@ class JsonCaller extends String{
 //package
 //protected
 //public
+//with (depricated)
 async function f1() {
   let caller = new JsonCaller('https://jsonplaceholder.typicode.com/todos/1');
   //const x = await resolveAfter2Seconds(10);
@@ -49,9 +51,24 @@ async function f1() {
   });
 }
 
+function* testYield(arr){
+	for(let i=0;i<arr.length;i++){
+    	yield arr[i];
+    }
+}
+
 f1().catch(e=>{console.log('error found:', e)}).then(x=>console.log('prosmise result of x.id:', x)).finally(()=>{console.log('finally by promise')});
 
 testArray = [true, String('2'), 100, 4, false]
+
+generator = testYield(testArray);
+res = generator.next();
+while(res.done != true){
+	console.log('yield:', res.value);
+    res = generator.next();
+}
+
+
 console.log('2 in testArray?', '2' in testArray)
 delete testArray[3]
 console.log('after delete testArray[3]', testArray[3])
