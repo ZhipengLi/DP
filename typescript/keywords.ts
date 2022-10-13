@@ -52,7 +52,7 @@ async function f1() : Promise<number> {
 
 f1().catch(e=>{console.log('error found:', e)}).then(x=>console.log('prosmise result of x.id:', x));
 
-testArray = [true, String('2'), 100, 4, false]
+let testArray : (boolean | String | Number)[] = [true, String('2'), 100, 4, false]
 console.log('2 in testArray?', '2' in testArray)
 delete testArray[3]
 console.log('after delete testArray[3]', testArray[3])
@@ -77,4 +77,3 @@ do{
     }
     //i+=1;
 } while(i<testArray.length)
-  
