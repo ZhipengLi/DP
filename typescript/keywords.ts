@@ -1,14 +1,17 @@
 //    https://github.com/microsoft/TypeScript/issues/2536
 //
+interface Todo{
+  id:number
+}
 class JsonCaller extends String{ 
-	static staticMethod(){
+	  static staticMethod():void{
     	console.log("called from static method")
     }
-	constructor(str: string){
+	  constructor(str: string){
     	super(str)
     }
-	private url = "private string"
-    getJson(){
+	  private url:string = "private string"
+    public getJson():Promise<Todo>{
       let url = this.toString();
       if(!url){
        	throw new Error("empty url string")
@@ -24,7 +27,7 @@ class JsonCaller extends String{
             catch(e){}
         }, 2000);
         console.log("private url:", this.url)
-    });
+      });
     }
 }
 
@@ -42,7 +45,7 @@ async function f1() : Promise<number> {
   //const x = await resolveAfter2Seconds(10);
   console.log('caller instance of JsonCaller?', caller instanceof JsonCaller)
   JsonCaller.staticMethod();
-  const x : any = await caller.getJson();
+  const x:Todo = await caller.getJson();
   caller = null;
   console.log('json object:', x);
   return new Promise((resolve)=>{
