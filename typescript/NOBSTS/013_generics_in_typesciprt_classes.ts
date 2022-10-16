@@ -2,7 +2,7 @@ interface Database<T, K> {
     get(id: K): T;
     set(id:K, value:T ): void;
 }
-interface Persistable {
+interface Persistable<T,K> {
     saveToString(): string;
     restoreFromString(storedState: string):void;
 }
